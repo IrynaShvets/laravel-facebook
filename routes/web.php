@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PostController;
 
 use \App\Http\Controllers\AdminController;
 
@@ -33,7 +34,18 @@ Route::group([
     Route::delete('/{user}/delete', [UserController::class, 'destroy'])->name('destroy');
 });
 
-// Route::get('/', [AdminController::class, 'index'])->name('layouts.admin');
+Route::group([
+    'as' => 'posts.',
+    'prefix' => 'posts'
+], function() {
+    Route::get('/', [PostController::class, 'index'])->name('index');
+    Route::get('/create', [PostController::class, 'create'])->name('create');
+    Route::post('/create', [PostController::class, 'store'])->name('store');
+    Route::get('/{post}/show', [PostController::class, 'show'])->name('show');
+    Route::get('/{post}/edit', [PostController::class, 'edit'])->name('edit');
+    Route::patch('/{post}/update', [PostController::class, 'update'])->name('update');
+    Route::delete('/{post}/delete', [PostController::class, 'destroy'])->name('destroy');
+});
 
 Auth::routes();
 
