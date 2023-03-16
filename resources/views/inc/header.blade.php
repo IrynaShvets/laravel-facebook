@@ -1,4 +1,4 @@
-<header class="d-flex flex-column flex-md-row align-items-center p-3 bg-warning bg-gradient">
+<header class="d-flex flex-column flex-md-row align-items-center p-3 bg-dark bg-gradient">
     <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
         <span class="fs-4">FaceBook</span>
     </a>

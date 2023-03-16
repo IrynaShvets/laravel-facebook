@@ -13,13 +13,9 @@ return new class extends Migration
     {
         Schema::create('friends', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            // $table->foreign('user_id')->references('id')->on('users');
+            $table->foreignId('user_id')->nullable()->constrained('users');
             $table->timestamps();
-        });
-
-        Schema::table('friends', function($table) {
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->softDeletes();
         });
 
     }

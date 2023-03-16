@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use \App\Models\Post;
@@ -15,7 +15,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::all();
-        return view('posts.index', compact('posts'));
+        return view('admin.posts.index', compact('posts'));
     }
 
     /**
@@ -23,7 +23,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        return view('admin.posts.create');
     }
 
     /**
@@ -39,7 +39,7 @@ class PostController extends Controller
         $post->image = $request->input('image');
 
         $post->save();
-        return redirect()->route('posts.index')->with('success', 'The post has been added.');
+        return redirect()->route('admin.posts.index')->with('success', 'The post has been added.');
     }
 
     /**
@@ -48,7 +48,7 @@ class PostController extends Controller
     public function show(string $id)
     {
         $post = new Post();
-        return view('posts.show', ['post' => $post->find($id)]);
+        return view('admin.posts.show', ['post' => $post->find($id)]);
     }
 
     /**
@@ -57,7 +57,7 @@ class PostController extends Controller
     public function edit(string $id)
     {
         $post = new Post;
-        return view('posts.edit', ['post' => $post->find($id)]);
+        return view('admin.posts.edit', ['post' => $post->find($id)]);
     }
 
     /**
@@ -73,7 +73,7 @@ class PostController extends Controller
         $post->image = $request->input('image');
 
         $post->save();
-        return redirect()->route('posts.index')->with('success', 'The post has been updated.');
+        return redirect()->route('admin.posts.index')->with('success', 'The post has been updated.');
     }
 
     /**
@@ -83,6 +83,6 @@ class PostController extends Controller
     {
 
         Post::find($id)->delete();
-        return redirect()->route('posts.index')->with('success', '204');
+        return redirect()->route('admin.posts.index')->with('success', '204');
     }
 }

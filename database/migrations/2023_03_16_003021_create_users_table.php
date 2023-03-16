@@ -14,8 +14,7 @@ return new class extends Migration
        
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('role_id')->nullable();
-            $table->unsignedBigInteger('permission_id')->nullable();
+            $table->foreignId('role_id')->nullable()->constrained('roles');
             $table->string('name');
             $table->string('email')->unique();
             $table->string('image')->nullable();
@@ -23,11 +22,8 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-        });
-
-        Schema::table('users', function($table) {
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
-            $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
+            $table->softDeletes();
+            $table->index('role_id', 'role_user_idx');
         });
 
     }

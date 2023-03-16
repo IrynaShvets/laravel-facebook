@@ -17,9 +17,9 @@
                 <h6 class="card-subtitle mb-2">{{ $post->created_at }}</h6>
                 <p class="card-text">{{ $post->description }}</p>
                 <p class="card-text">{{ $post->body }}</p>
-                <a href="{{ route('posts.show', $post->id) }}"><button class="btn btn-success">Post link</button></a>
-                <a href="{{route('posts.edit', $post->id)}}"><button class="btn btn-warning">Edit</button></a>
-                <a href="{{route('posts.destroy', $post->id)}}"><button class="btn btn-danger">Delete</button></a>
+                <a href="{{ route('admin.posts.show', $post->id) }}"><button class="btn btn-success">Post link</button></a>
+                <a href="{{route('admin.posts.edit', $post->id)}}"><button class="btn btn-warning">Edit</button></a>
+                <a href="{{route('admin.posts.destroy', $post->id)}}"><button class="btn btn-danger">Delete</button></a>
             </div>
         </div>
     @endforeach

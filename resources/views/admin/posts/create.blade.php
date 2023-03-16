@@ -7,7 +7,7 @@
 @section('content')
     <h1>Form for creating posts</h1>
 
-    <form action="{{ route('posts.create') }}" method="post">
+    <form action="{{ route('admin.posts.create') }}" method="post">
         @csrf
         <div class="form-group">
             <label for="title">Title</label>
