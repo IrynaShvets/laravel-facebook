@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Post;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,11 +22,12 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|unique:posts|min:5|max:255|string',
-            'description' => 'required|min:5|max:100|string',
-            'user_id' => 'required|integer|exists:users,id',
-            'body' => 'required|min:5|string',
-            'image.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'image' => 'string',
+            'permission_id' => 'required|integer|exists:permissions,id',
+            'role_id' => 'required|integer|exists:roles,id',
         ];
     }
 }

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title')
     {{$post->name}}
@@ -6,9 +6,11 @@
 
 @section('content')
 
-<h1>{{$post->name}}</h1>
+<h1 class="text-white">{{$post->name}}</h1>
 <div class="alert bg-info bg-gradient">
-    <img src="{{ $post->image }}" alt="{{ $post->title }}" width="100%" heigh="100px" class="card-title">
+   
+    <img src="{{asset($post->image) }}" width="50" height="50"/>
+
     <h5 class="card-title">{{ $post->title }}</h5>
     <h6 class="card-subtitle mb-2">{{ $post->created_at }}</h6>
     <p class="card-text">{{ $post->description }}</p>

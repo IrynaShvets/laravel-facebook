@@ -3,8 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
-
 use \App\Http\Controllers\AdminController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RoleController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,36 +20,32 @@ use \App\Http\Controllers\AdminController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::redirect('/', '/login');
+Route::get('/home', function () {
+    if (session('status')) {
+        return redirect()->route('layouts.admin')->with('status', session('status'));
+    }
+    return redirect()->route('layouts.admin');
 });
 
-Route::group([
-    'as' => 'users.',
-    'prefix' => 'users'
-], function() {
-    Route::get('/', [UserController::class, 'index'])->name('index');
-    Route::get('/create', [UserController::class, 'create'])->name('create');
-    Route::post('/create', [UserController::class, 'store'])->name('store');
-    Route::get('/{user}/show', [UserController::class, 'show'])->name('show');
-    Route::get('/{user}/edit', [UserController::class, 'edit'])->name('edit');
-    Route::patch('/{user}/update', [UserController::class, 'update'])->name('update');
-    Route::delete('/{user}/delete', [UserController::class, 'destroy'])->name('destroy');
-});
+Route::get('/admin', [AdminController::class, 'index'])->name('layouts.admin')->middleware('auth');
 
-Route::group([
-    'as' => 'posts.',
-    'prefix' => 'posts'
-], function() {
-    Route::get('/', [PostController::class, 'index'])->name('index');
-    Route::get('/create', [PostController::class, 'create'])->name('create');
-    Route::post('/create', [PostController::class, 'store'])->name('store');
-    Route::get('/{post}/show', [PostController::class, 'show'])->name('show');
-    Route::get('/{post}/edit', [PostController::class, 'edit'])->name('edit');
-    Route::patch('/{post}/update', [PostController::class, 'update'])->name('update');
-    Route::delete('/{post}/delete', [PostController::class, 'destroy'])->name('destroy');
+Route::resources([
+    'posts' => PostController::class,
+    'users' => UserController::class,
+]);
+
+Route::resource('roles', RoleController::class)->except([
+    'show'
+])->middleware('auth');
+Route::resource('permissions', PermissionController::class)->except([
+    'show'
+])->middleware('auth');
+
+Route::get('get/file', function(){
+    return Storage::download('/storage/app');
 });
 
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

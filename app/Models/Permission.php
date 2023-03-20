@@ -14,4 +14,9 @@ class Permission extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'permmission_users', 'permmission_id', 'user_id')->using(PermissionUser::class);
+    }
 }

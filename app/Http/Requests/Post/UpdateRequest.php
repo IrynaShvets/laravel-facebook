@@ -22,11 +22,11 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|min:3|max:30',
-            'description' => 'required|min:5|max:100',
-            'user_id' => '',
-            'body' => 'required|min:5',
-            'image' => '',
+            'title' => 'required|min:3|max:30|string',
+            'description' => 'required|min:5|max:100|string',
+            'user_id' => 'required|integer|exists:users,id',
+            'body' => 'required|min:5|string',
+            'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 }

@@ -1,28 +1,60 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title')
     All users
 @endsection
 
 @section('content')
-    <h1>All users</h1>
-
-<div class="d-flex flex-wrap">
+    <h1 class="text-white">All users</h1>
+    <table class="table table-bordered table-hover m-2 bg-white">
+    <thead class="">
+        <tr>
+            <th scope="col">User name</th>
+            <th scope="col">Date created user</th>
+            <th scope="col">Delete a user</th>
+        </tr>
+    </thead>
 
     @foreach ($users as $user)
-        <div class="card m-2 bg-primary bg-gradient bg-opacity-50" style="width: 18rem;">
-            <div class="card-body">
-            <img src="{{ $user->image }}" alt="{{ $user->name }}" width="100%" heigh="100px" class="card-title">
+    <tbody>
+        <tr>
+            <td>
                 <h5 class="card-title">{{ $user->name }}</h5>
+            </td>
+            <td>
                 <h6 class="card-subtitle mb-2">{{ $user->created_at }}</h6>
-                <p class="card-text">{{ $user->email }}</p>
-                <a href="{{ route('users.show', $user->id) }}"><button class="btn btn-success">User link</button></a>
-                <a href="{{route('users.edit', $user->id)}}"><button class="btn btn-warning">Edit</button></a>
-                <a href="{{route('users.destroy', $user->id)}}"><button class="btn btn-danger">Delete</button></a>
+            </td>
+            <td>
+                <button data-bs-toggle="modal" class="btn bg-secondary text-white" data-bs-target="#deleteUserModal_{{$user->id}}" data-action="{{ route('users.destroy', $user->id) }}">Delete</button>
+            </td>
+        </tr>
+    </tbody>
+
+        <!-- Delete User Modal -->
+        <div class="modal fade" id="deleteUserModal_{{$user->id}}" data-backdrop="static" tabindex="-1" role="dialog"
+                aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteUserModalLabel">This action is irreversible.</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="{{ route('users.destroy', $user->id) }}" method="POST">
+                            @method('DELETE')
+                            @csrf
+                            <div class="modal-body">
+                                <h5 class="text-center">Are you sure you want to delete this user?</h5>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-danger">Yes, delete user</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-        </div>
     @endforeach
 
-</div>
+</table>
     
 @endsection

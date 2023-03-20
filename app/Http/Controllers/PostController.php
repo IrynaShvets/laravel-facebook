@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use \App\Models\Post;
+use \App\Models\User;
 use \App\Http\Requests\Post\StoreRequest;
 use \App\Http\Requests\Post\UpdateRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -23,7 +28,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        $users = User::all();
+        return view('posts.create', ['users' => $users]);
     }
 
     /**
@@ -36,7 +42,9 @@ class PostController extends Controller
         $post->description = $request->input('description');
         $post->body = $request->input('body');
         $post->user_id = $request->input('user_id');
-        $post->image = $request->input('image');
+        
+        $path = $request->file('image')->store('public/images');
+        $post->image = $path;
 
         $post->save();
         return redirect()->route('posts.index')->with('success', 'The post has been added.');
@@ -56,8 +64,9 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
-        $post = new Post;
-        return view('posts.edit', ['post' => $post->find($id)]);
+        $users = User::all();
+        $post = Post::find($id);
+        return view('posts.edit', ['post' => $post, 'users' => $users]);
     }
 
     /**
@@ -65,6 +74,7 @@ class PostController extends Controller
      */
     public function update(UpdateRequest $request, string $id)
     {
+
         $post = Post::find($id);
         $post->title = $request->input('title');
         $post->description = $request->input('description');
@@ -81,7 +91,6 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-
         Post::find($id)->delete();
         return redirect()->route('posts.index')->with('success', '204');
     }
