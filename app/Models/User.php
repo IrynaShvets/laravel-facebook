@@ -17,6 +17,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
+    const ROLE_ADMIN = 'admin';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -72,4 +74,18 @@ class User extends Authenticatable
         return Storage::url($this->image);
     }
 
+    public function isAuth()
+    {
+        $user = User::find(auth()->user()->id);
+        if (asset($user->role()->first()->name)) {
+            $role = $user->role()->first()->name;
+
+            if($role === self::ROLE_ADMIN){
+            return true;
+            }
+            else{
+                return false;
+            }
+        }
+    }
 }

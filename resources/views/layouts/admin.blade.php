@@ -81,9 +81,9 @@
                     @isset(Auth::user()->name)
                     <img src="https://i.gyazo.com/50c000c0e4715eba3a2d778c01ac1c5c.png" alt="avatar" width="28" height="28" class="rounded-circle">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            
-                        {{ Auth::user()->name }}
+                            {{ Auth::user()->name }} 
                         </a>
+                        <p>{{ asset(Auth::user()->role()->first()->name) }}</p>
                         @endisset
                         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
 

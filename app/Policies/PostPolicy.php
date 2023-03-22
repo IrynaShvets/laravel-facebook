@@ -2,28 +2,29 @@
 
 namespace App\Policies;
 
+use App\Models\Post;
 use App\Models\User;
+use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
-class AdminPolicy
+class PostPolicy
 {
-    const ROLE_ADMIN = 'admin';
-   
+    use HandlesAuthorization;
+    
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        
+        return true;
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, User $model): bool
+    public function view(User $user, Post $post): bool
     {
-        
-        return $model->role === self::ROLE_ADMIN;
+        //
     }
 
     /**
@@ -31,22 +32,23 @@ class AdminPolicy
      */
     public function create(User $user): bool
     {
-        // dd(1111);
-        // return $user->role === 'admin';
+        //
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, User $model): bool
+    public function update(User $user, Post $post): Response
     {
-        //
+        return $user->id === $post->user_id
+                ? Response::allow()
+                : Response::deny('You do not own this post.');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, User $model): bool
+    public function delete(User $user, Post $post): bool
     {
         //
     }
@@ -54,7 +56,7 @@ class AdminPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, User $model): bool
+    public function restore(User $user, Post $post): bool
     {
         //
     }
@@ -62,7 +64,7 @@ class AdminPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, User $model): bool
+    public function forceDelete(User $user, Post $post): bool
     {
         //
     }

@@ -14,11 +14,18 @@ use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
+    // public function __construct()
+    // {
+    //     $this->authorizeResource(Post::class, 'post');
+    // }
+    
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('viewAny', Post::class);
+        
         $posts = Post::paginate(5);
         return view('posts.index', compact('posts'));
     }
@@ -29,6 +36,7 @@ class PostController extends Controller
     public function create()
     {
         // $this->authorize('view', auth()->user());
+        // $this->authorize('create', Post::class);
         $users = User::all();
         return view('posts.create', ['users' => $users]);
     }
@@ -38,7 +46,12 @@ class PostController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
+        
+        // if ($request->user()->cannot('create', Post::class)) {
+        //     abort(403);
+        // }
         $post = new Post;
+        
         $post->title = $request->input('title');
         $post->description = $request->input('description');
         $post->body = $request->input('body');
@@ -80,7 +93,14 @@ class PostController extends Controller
      */
     public function update(StoreRequest $request, string $id)
     {
+        
         $post = Post::find($id);
+
+        // if ($request->user()->cannot('update', $post)) {
+        //     abort(403);
+        // }
+        $this->authorize('update', $post);
+
         $post->title = $request->input('title');
         $post->description = $request->input('description');
         $post->body = $request->input('body');

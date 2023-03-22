@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,9 +16,11 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // if (auth()->user()->role !== 'admin') {
-        //     return redirect()->route('login');
-        // }
+        $user = new User();
+        
+        if (!$user->isAuth()) {
+            abort(403);
+        }
         
         return $next($request);
     }

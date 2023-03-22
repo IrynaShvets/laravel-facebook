@@ -9,7 +9,7 @@
 <table class="table table-bordered table-hover m-2 bg-white">
     <thead class="">
         <tr>
-            <th scope="col">Role name </th>
+            <th scope="col">Role name</th>
             <th scope="col">Edit role</th>
             <th scope="col">Delete role</th>
         </tr>
@@ -39,10 +39,10 @@
                     <h5 class="modal-title" id="deleteRoleModalLabel">This action is irreversible.</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('roles.destroy', $role->id) }}" method="role" enctype="multipart/form-data">
+                <form action="{{ route('roles.destroy', $role->id) }}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    @method('DELETE')
                     <div class="modal-body">
-                        @csrf
-                        @method('DELETE')
                         <input id="id" name="$role->id" hidden value="">
                         <h5 class="text-center">Are you sure you want to delete this role?</h5>
                     </div>

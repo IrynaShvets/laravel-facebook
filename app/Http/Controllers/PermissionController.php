@@ -30,27 +30,14 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        $permission = new Permission();
-        $permission->name = $request->input('name');
-
-        $permission->save();
-        return redirect()->route('permissions.index');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+        $data = request()->validate([
+            'name' => 'required|string|unique:roles|max:50',
+            'description' => 'nullable|string|max:100',
+        ]);
+    
+        Permission::create($data);
+        
+        return redirect()->route('permissions.index')->with('success', 'The role has been added.');
     }
 
     /**
@@ -58,6 +45,7 @@ class PermissionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Permission::find($id)->delete();
+        return redirect()->route('permissions.index')->with('success', '204');
     }
 }

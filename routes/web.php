@@ -30,19 +30,18 @@ Route::get('/home', function () {
     return redirect()->route('layouts.admin');
 });
 
-
-Route::middleware(['auth', 'admin'])->group(function () {
+Route::middleware(['auth'])->group(function () {
 
     Route::get('/admin', [AdminController::class, 'index'])->name('layouts.admin');
     Route::resource('roles', RoleController::class)->except([
         'show'
-    ]);
+    ])->middleware('admin');
 
     Route::resource('posts', PostController::class);
-    Route::resource('users', UserController::class);
+    Route::resource('users', UserController::class)->middleware('admin');
     Route::resource('permissions', PermissionController::class)->except([
-        'show'
-    ]);
+        'show', 'edit', 'update'
+    ])->middleware('admin');
 });
 
 Route::get('get/file', function () {

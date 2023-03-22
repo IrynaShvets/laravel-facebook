@@ -31,19 +31,13 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $data = request()->validate([
             'name' => 'required|unique:roles|max:50',
         ]);
+    
+        Role::create($data);
  
-        if ($validator->fails()) {
-            return redirect('roles/create')
-                        ->withErrors($validator)
-                        ->withInput();
-        }
-
-        $validated = $validator->validated();
- 
-        return redirect()->route('roles.index');
+        return redirect()->route('roles.index')->with('success', 'The role has been added.');
     }
 
     /**
@@ -60,19 +54,12 @@ class RoleController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $validator = Validator::make($request->all(), [
+        $data = request()->validate([
             'name' => 'required|unique:roles|max:50',
         ]);
- 
-        if ($validator->fails()) {
-            return redirect('roles/create')
-                        ->withErrors($validator)
-                        ->withInput();
-        }
-
-        $validated = $validator->validated();
- 
-        return redirect()->route('roles.index');
+    
+        Role::updated($data);
+        return redirect()->route('roles.index')->with('success', 'The role has been updated.');
     }
 
     /**
