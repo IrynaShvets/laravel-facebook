@@ -78,7 +78,13 @@
                                     </form>
                                 </div>
                             </li>
+                            
                         @endguest
+                        @can('view', auth()->user())
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('layouts.admin') }}">Admin</a>
+                            </li>
+                        @endcan
                     </ul>
                 </div>
             </div>

@@ -30,21 +30,22 @@ Route::get('/home', function () {
     return redirect()->route('layouts.admin');
 });
 
-Route::get('/admin', [AdminController::class, 'index'])->name('layouts.admin')->middleware('auth');
 
-Route::resources([
-    'posts' => PostController::class,
-    'users' => UserController::class,
-]);
+Route::middleware(['auth', 'admin'])->group(function () {
 
-Route::resource('roles', RoleController::class)->except([
-    'show'
-])->middleware('auth');
-Route::resource('permissions', PermissionController::class)->except([
-    'show'
-])->middleware('auth');
+    Route::get('/admin', [AdminController::class, 'index'])->name('layouts.admin');
+    Route::resource('roles', RoleController::class)->except([
+        'show'
+    ]);
 
-Route::get('get/file', function(){
+    Route::resource('posts', PostController::class);
+    Route::resource('users', UserController::class);
+    Route::resource('permissions', PermissionController::class)->except([
+        'show'
+    ]);
+});
+
+Route::get('get/file', function () {
     return Storage::download('/storage/app');
 });
 

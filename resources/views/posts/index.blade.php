@@ -65,4 +65,8 @@
             </div>
         @endforeach
     </table>
+    
+    <div class="mt-3">
+        {{ $posts->withQueryString()->links() }}
+    </div>
 @endsection

@@ -11,7 +11,9 @@
         <tr>
             <th scope="col">User name</th>
             <th scope="col">Date created user</th>
-            <th scope="col">Delete a user</th>
+            <th scope="col">Show user</th>
+            <th scope="col">Edit user</th>
+            <th scope="col">Delete user</th>
         </tr>
     </thead>
 
@@ -23,6 +25,12 @@
             </td>
             <td>
                 <h6 class="card-subtitle mb-2">{{ $user->created_at }}</h6>
+            </td>
+            <td>
+                <a href="{{ route('users.show', $user->id) }}"><button class="btn btn-success">Show user</button></a>
+            </td>
+            <td>
+                <a href="{{route('users.edit', $user->id)}}"><button class="btn btn-warning">Edit</button></a>
             </td>
             <td>
                 <button data-bs-toggle="modal" class="btn bg-secondary text-white" data-bs-target="#deleteUserModal_{{$user->id}}" data-action="{{ route('users.destroy', $user->id) }}">Delete</button>
@@ -56,5 +64,9 @@
     @endforeach
 
 </table>
+
+<div class="mt-3">
+    {{ $users->withQueryString()->links() }}
+</div>
     
 @endsection

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use \App\Models\Post;
 use \App\Models\User;
 use \App\Http\Requests\Post\StoreRequest;
-use \App\Http\Requests\Post\UpdateRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -19,7 +19,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::paginate(5);
         return view('posts.index', compact('posts'));
     }
 
@@ -28,6 +28,7 @@ class PostController extends Controller
      */
     public function create()
     {
+        // $this->authorize('view', auth()->user());
         $users = User::all();
         return view('posts.create', ['users' => $users]);
     }
@@ -35,17 +36,22 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
-        $post = new Post();
+        $post = new Post;
         $post->title = $request->input('title');
         $post->description = $request->input('description');
         $post->body = $request->input('body');
         $post->user_id = $request->input('user_id');
         
-        $path = $request->file('image')->store('public/images');
-        $post->image = $path;
-
+        if ($request->hasFile('image')) {
+            $destination_path = 'images';
+            $image = $request->file('image');
+            $image_name = time()."_".$image->getClientOriginalName();           
+            $path = $request->file('image')->storeAs($destination_path , $image_name, 'public');
+            $post->image = $path;
+        }
+        
         $post->save();
         return redirect()->route('posts.index')->with('success', 'The post has been added.');
     }
@@ -55,8 +61,8 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        $post = new Post();
-        return view('posts.show', ['post' => $post->find($id)]);
+        $post = Post::find($id);
+        return view('posts.show', ['post' => $post]);
     }
 
     /**
@@ -66,24 +72,31 @@ class PostController extends Controller
     {
         $users = User::all();
         $post = Post::find($id);
-        return view('posts.edit', ['post' => $post, 'users' => $users]);
+        return view('posts.edit', ['post' => $post, 'users' => $users, ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRequest $request, string $id)
+    public function update(StoreRequest $request, string $id)
     {
-
         $post = Post::find($id);
         $post->title = $request->input('title');
         $post->description = $request->input('description');
         $post->body = $request->input('body');
         $post->user_id = $request->input('user_id');
-        $post->image = $request->input('image');
+        
+        if ($request->hasFile('image')) {
+            Storage::disk('public')->delete($post->is_image);
+            $destination_path = 'images';
+            $image = $request->file('image');
+            $image_name = time()."_".$image->getClientOriginalName();           
+            $path = $request->file('image')->storeAs($destination_path , $image_name, 'public');
+            $post->image = $path;
+        }
 
         $post->save();
-        return redirect()->route('posts.index')->with('success', 'The post has been updated.');
+        return redirect()->route('posts.index')->with('success', 'The post has been added.');
     }
 
     /**

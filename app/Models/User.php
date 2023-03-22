@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -29,6 +30,8 @@ class User extends Authenticatable
         'permission_id',
         'role_id',
     ];
+
+    protected $guarded = false;
 
     /**
      * The attributes that should be hidden for serialization.
@@ -56,12 +59,17 @@ class User extends Authenticatable
 
     public function permissions(): BelongsToMany
     {
-        return $this->belongsToMany(Permmission::class, 'permmission_users', 'user_id', 'permmission_id')->using(PermissionUser::class);
+        return $this->belongsToMany(Permission::class, 'permmission_users', `permmission_users`.`user_id`, `permmission_users`.`permmission_id`)->using(PermissionUser::class);
     }
-
+    
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function getAvatarImageAttribute() 
+    {
+        return Storage::url($this->image);
     }
 
 }

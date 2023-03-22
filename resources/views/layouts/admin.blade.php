@@ -20,7 +20,6 @@
 </head>
 
 <body>
-@auth
     <div class="container-fluid overflow-hidden">
         <div class="row vh-100 overflow-auto">
             <div class="col-12 col-sm-3 col-xl-2 px-sm-2 px-0 bg-secondary d-flex sticky-top">
@@ -116,7 +115,6 @@
             </div>
         </div>
     </div>
-    @endauth
 </body>
 
 </html>

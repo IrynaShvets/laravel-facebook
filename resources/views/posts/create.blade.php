@@ -70,6 +70,9 @@
                 @endforeach
             </select>
         </div>
+        @error('user_id')
+            <div class="alert alert-danger">{{ $message }}</div>
+        @enderror
 
         <button type="submit" class="btn btn-success">Submit</button>
     </form>

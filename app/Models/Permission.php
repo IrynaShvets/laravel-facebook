@@ -15,6 +15,8 @@ class Permission extends Model
         'name',
     ];
 
+    protected $guarded = false;
+
     public function users()
     {
         return $this->belongsToMany(User::class, 'permmission_users', 'permmission_id', 'user_id')->using(PermissionUser::class);

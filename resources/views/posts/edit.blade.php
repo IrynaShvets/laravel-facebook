@@ -25,10 +25,10 @@
         
         <div class="form-group">
             <label for="image">Image</label>
-            <input type="text" name="image" 
+            <input type="file" name="image" 
             placeholder="Edit a image" 
             id="title" class="form-control"
-            value="{{ old('image', $post->image) }}"
+            value="{{ old('image', $post->is_image) }}"
             class="@error('image') is-invalid @enderror"
             >
         </div>
@@ -63,17 +63,15 @@
         <div class="input-group mb-3">
             <label class="input-group-text" for="inputGroupSelectCategory">Users</label>
             <select class="form-select" name="user_id" id="inputGroupSelect01">
-                <option selected>Select user...</option>
+                <option disabled>Select user...</option>
                 @foreach($users as $user)
-                    <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : ''}}>{{ $user->name }}</option>
+                    <option value="{{ $user->id }}" >{{ $user->name }}</option>
                 @endforeach
             </select>
         </div>
-        @error('users')
+        @error('user_id')
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror
-
-
 
         <button type="submit" class="btn btn-success">Submit</button>
     </form>
