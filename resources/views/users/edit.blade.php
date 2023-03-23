@@ -41,7 +41,7 @@
             <input type="file" name="image" 
             placeholder="Edit a image" 
             id="title" class="form-control"
-            value="{{ old('image', $user->is_image) }}"
+            value="{{ old('image', $user->image) }}"
             class="@error('image') is-invalid @enderror"
             >
         </div>
@@ -51,10 +51,10 @@
 
         <div class="form-group">
             <label for="password">Password</label>
-            <input type="text" name="password" 
+            <input type="password" name="password" 
             placeholder="Edit a password" id="password" 
             class="form-control"
-            value="{{ old('password', $user->password) }}"
+            value="{{--decrypt($user->password) ?? old('password')--}}"
             class="@error('password') is-invalid @enderror"
             >
         </div>
@@ -93,12 +93,8 @@
             <select class="form-select" multiple name="permissions[]" id="inputGroupSelectPermissions">
                 <option disabled>Select permissions...</option>
                 @foreach($permissions as $permission)
-                    <option
-                    
-                    value="{{ $permission->id }}">{{ $permission->name }}
-                    </option>
+                <option value="{{ $permission->id }}" {{ in_array( $permission->id, old('permissions', $selectedPermissions))  ? 'selected' : ''}}>{{ $permission->name }}</option>
                 @endforeach
-
             </select>
         </div>
         @error('permissions')

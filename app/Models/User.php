@@ -61,7 +61,7 @@ class User extends Authenticatable
 
     public function permissions(): BelongsToMany
     {
-        return $this->belongsToMany(Permission::class, 'permmission_users', `permmission_users`.`user_id`, `permmission_users`.`permmission_id`)->using(PermissionUser::class);
+        return $this->belongsToMany(Permission::class, 'permission_users', 'user_id', 'permission_id')->using(PermissionUser::class);
     }
     
     public function role(): BelongsTo

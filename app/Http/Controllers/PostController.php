@@ -14,10 +14,10 @@ use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->authorizeResource(Post::class, 'post');
-    // }
+    public function __construct()
+    {
+        $this->authorizeResource(Post::class, 'post');
+    }
     
     /**
      * Display a listing of the resource.
@@ -26,7 +26,7 @@ class PostController extends Controller
     {
         $this->authorize('viewAny', Post::class);
         
-        $posts = Post::paginate(5);
+        $posts = Post::orderBy('created_at', 'desc')->paginate(5);
         return view('posts.index', compact('posts'));
     }
 
@@ -36,7 +36,7 @@ class PostController extends Controller
     public function create()
     {
         // $this->authorize('view', auth()->user());
-        // $this->authorize('create', Post::class);
+        $this->authorize('create', Post::class);
         $users = User::all();
         return view('posts.create', ['users' => $users]);
     }
@@ -99,7 +99,7 @@ class PostController extends Controller
         // if ($request->user()->cannot('update', $post)) {
         //     abort(403);
         // }
-        $this->authorize('update', $post);
+        // $this->authorize('update', $post);
 
         $post->title = $request->input('title');
         $post->description = $request->input('description');
@@ -107,13 +107,14 @@ class PostController extends Controller
         $post->user_id = $request->input('user_id');
         
         if ($request->hasFile('image')) {
-            Storage::disk('public')->delete($post->is_image);
             $destination_path = 'images';
             $image = $request->file('image');
             $image_name = time()."_".$image->getClientOriginalName();           
             $path = $request->file('image')->storeAs($destination_path , $image_name, 'public');
             $post->image = $path;
+            
         }
+
 
         $post->save();
         return redirect()->route('posts.index')->with('success', 'The post has been added.');
@@ -124,7 +125,10 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        Post::find($id)->delete();
+        $post = Post::find($id);
+        $post->delete();
+        Storage::delete($post->image);
+
         return redirect()->route('posts.index')->with('success', '204');
     }
 }

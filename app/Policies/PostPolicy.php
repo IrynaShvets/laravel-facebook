@@ -24,7 +24,7 @@ class PostPolicy
      */
     public function view(User $user, Post $post): bool
     {
-        //
+        
     }
 
     /**
@@ -32,7 +32,7 @@ class PostPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return $user->id > 0;
     }
 
     /**
@@ -50,7 +50,7 @@ class PostPolicy
      */
     public function delete(User $user, Post $post): bool
     {
-        //
+        return $user->id == $post->user_id;
     }
 
     /**
@@ -58,7 +58,7 @@ class PostPolicy
      */
     public function restore(User $user, Post $post): bool
     {
-        //
+        return Response::deny();
     }
 
     /**

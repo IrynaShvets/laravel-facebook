@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\StoreRequest;
+use App\Http\Requests\User\UpdateRequest;
 use Illuminate\Http\Request;
 use \App\Models\User;
 
 use App\Models\Permission;
 use App\Models\PermissionUser;
 use App\Models\Role;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -35,38 +39,21 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
-        
-    $data = request()->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:users',
-        'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        'password' => 'required|string|min:8|confirmed',
-        'role_id' => 'string',
-        'permissions' => '',
-    ]);
 
-    if ($request->hasFile('image')) {
+        $validated = $request->validated();
+        $data = Arr::except($validated, ['permissions']);
+        if ($request->hasFile('image')) {
             $destination_path = 'images';
             $image = $request->file('image');
             $image_name = time()."_".$image->getClientOriginalName();           
             $path = $request->file('image')->storeAs($destination_path , $image_name, 'public');
             $data['image'] = $path;
         }
-
-    $permissions = $data['permissions'];
-    $data['password'] = Hash::make($data['password']);
-    unset($data['permissions']);
-
-    $user = User::create($data);
-    
-    foreach ($permissions as $permission) {
-        PermissionUser::firstOrCreate([
-            'permission_id' => $permission,
-            'user_id' => $user->id,
-        ]);
-    }
+        
+        Arr::get($validated, 'permissions', []);
+        User::create($data);
 
     return redirect()->route('users.index')->with('success', 'The post has been added.');
 }
@@ -83,58 +70,29 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
         $permissions = Permission::all();
+        $selectedPermissions = $user->permissions()->get(['permission_id'])->pluck('permission_id')->toArray();
         $roles = Role::all();
-        $user = User::find($id);
         
-        // $selectedPermissions = $user->permissions()->get(['id']);'selectedPermissions' => $selectedPermissions
-// dd($selectedPermissions);
-        return view('users.edit', ['user' => $user, 'roles' => $roles, 'permissions' => $permissions, ]);
+        return view('users.edit', compact('user', 'roles', 'permissions', 'selectedPermissions'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateRequest $request, string $id)
     {
-        $data = request()->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'password' => 'required|string|min:8|confirmed',
-            'role_id' => 'required|integer|exists:roles,id',
-            'permissions' => '',
-        ]);
-
-        // dd($data);
-    
-        if ($request->hasFile('image')) {
-                $destination_path = 'images';
-                $image = $request->file('image');
-                $image_name = time()."_".$image->getClientOriginalName();           
-                $path = $request->file('image')->storeAs($destination_path , $image_name, 'public');
-                $data['image'] = $path;
-            }
-    
-        $permissions = $data['permissions'];
+        $user = User::query()->findOrFail($id);
         
-        unset($data['permissions']);
-    
-        $user = User::create($data);
+        $user->update($request->only('permissions', 'role_id'));
         
-        foreach ($permissions as $permission) {
-            PermissionUser::updateOrCreate([
-                'permission_id' => $permission,
-                'user_id' => $user->id,
-            ]);
-        }
-    
-        return redirect()->route('users.index')->with('success', 'The post has been added.');
+        $user->permissions()->sync($user->permissions);
+        
+        // dd($user);
+        return back()->with('Success');
     }
-
-
 
     /**
      * Remove the specified resource from storage.

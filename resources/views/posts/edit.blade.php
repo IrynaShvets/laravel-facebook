@@ -28,7 +28,7 @@
             <input type="file" name="image" 
             placeholder="Edit a image" 
             id="title" class="form-control"
-            value="{{ old('image', $post->is_image) }}"
+            value="{{ old('image', $post->image) }}"
             class="@error('image') is-invalid @enderror"
             >
         </div>
