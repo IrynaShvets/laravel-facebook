@@ -52,17 +52,20 @@
                             </div>
                         </li>
 
-                        <li class="nav-item">
-                            <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
-                                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownRole" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <span class="d-none d-sm-inline mx-1 text-dark">Roles</span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownRole">
-                                    <li><a href="{{ route('roles.index') }}" class="dropdown-item">All roles</a></li>
-                                    <li><a href="{{ route('roles.create') }}" class="dropdown-item">Create role</a></li>
-                                </ul>
-                            </div>
-                        </li>
+                       
+                            <li class="nav-item">
+                                <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
+                                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownRole" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span class="d-none d-sm-inline mx-1 text-dark">Roles</span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownRole">
+                                        <li><a href="{{ route('roles.index') }}" class="dropdown-item">All roles</a></li>
+                                        <li><a href="{{ route('roles.create') }}" class="dropdown-item">Create role</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                       
+                        
 
                         <li class="nav-item">
                             <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
@@ -83,7 +86,7 @@
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ Auth::user()->name }} 
                         </a>
-                        <p>{{ asset(Auth::user()->role()->first()->name) }}</p>
+                       
                         @endisset
                         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
 

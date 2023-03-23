@@ -31,9 +31,7 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::all();
-        $permissions = Permission::all();
-        
-        return view('users.create', ['roles' => $roles, 'permissions' => $permissions]);
+        return view('users.create', ['roles' => $roles]);
     }
 
     /**
@@ -43,7 +41,7 @@ class UserController extends Controller
     {
 
         $validated = $request->validated();
-        $data = Arr::except($validated, ['permissions']);
+       
         if ($request->hasFile('image')) {
             $destination_path = 'images';
             $image = $request->file('image');
@@ -52,7 +50,6 @@ class UserController extends Controller
             $data['image'] = $path;
         }
         
-        Arr::get($validated, 'permissions', []);
         User::create($data);
 
     return redirect()->route('users.index')->with('success', 'The post has been added.');
@@ -72,25 +69,19 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $permissions = Permission::all();
-        $selectedPermissions = $user->permissions()->get(['permission_id'])->pluck('permission_id')->toArray();
+        // $permissions = Permission::all();
         $roles = Role::all();
         
-        return view('users.edit', compact('user', 'roles', 'permissions', 'selectedPermissions'));
+        return view('users.edit', compact('user', 'roles'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
         $user = User::query()->findOrFail($id);
-        
-        $user->update($request->only('permissions', 'role_id'));
-        
-        $user->permissions()->sync($user->permissions);
-        
-        // dd($user);
+        $user->update($request->only('role_id'));
         return back()->with('Success');
     }
 

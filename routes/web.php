@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use \App\Http\Controllers\AdminController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\PermissionRoleController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -38,7 +39,7 @@ Route::middleware(['auth'])->group(function () {
     ])->middleware('admin');
 
     Route::resource('posts', PostController::class);
-    Route::resource('users', UserController::class)->middleware('admin');
+    Route::resource('users', UserController::class);
     Route::resource('permissions', PermissionController::class)->except([
         'show', 'edit', 'update'
     ])->middleware('admin');

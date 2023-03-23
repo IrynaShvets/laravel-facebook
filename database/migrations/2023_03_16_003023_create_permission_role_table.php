@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('permission_users', function (Blueprint $table) {
-            $table->id();
+        Schema::create('permission_role', function (Blueprint $table) {
             $table->foreignId('permission_id')->nullable()->constrained('permissions');
-            $table->foreignId('user_id')->nullable()->constrained('users');
-            $table->index('permission_id', 'permission_user_permission_idx');
-            $table->index('user_id', 'user_permission_user_idx');
-            $table->timestamps();
+            $table->foreignId('role_id')->nullable()->constrained('roles');
+            $table->index('permission_id');
+            $table->index('role_id');
         });
     }
 
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('permission_users');
+        Schema::dropIfExists('permission_role');
     }
 };

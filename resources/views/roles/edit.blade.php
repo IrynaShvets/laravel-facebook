@@ -10,16 +10,16 @@
     <form action="{{ route('roles.update', ['role' => $role->id]) }}" method="post" enctype="multipart/form-data">
         @csrf
         @method('PATCH')
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" name="name" 
-            placeholder="Edit a name" id="name" 
-            class="form-control"
-            value="{{ old('name', $role->name) }}"
-            class="@error('name') is-invalid @enderror"
-            >
+       
+        <div class="col-md-4 bg-white">
+            @foreach($permissions as $permission)
+            <input type="checkbox" class="form-check-input" name="permissions[]" @foreach($role->permissions as $rolePermission) {{ $permission->id === $rolePermission ? 'checked' : '' }} @endforeach
+                value="{{ $permission->id }}" id="{{ $permission->id }}">
+                {{ $permission->name }}
+                <br/>
+            @endforeach
         </div>
-        @error('name')
+        @error('permissions')
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror
 

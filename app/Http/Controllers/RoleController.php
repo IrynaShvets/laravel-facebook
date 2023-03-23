@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -23,7 +24,10 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('roles.create');
+        $roles = Role::all();
+        $permissions = Permission::all();
+        
+        return view('roles.create', compact('roles', 'permissions'));
     }
 
     /**
@@ -33,9 +37,13 @@ class RoleController extends Controller
     {
         $data = request()->validate([
             'name' => 'required|unique:roles|max:50',
+            'permissions' => '',
         ]);
+        $permissions = $data['permissions'];
+        unset($data['permissions']);
     
-        Role::create($data);
+        $role = Role::create($data);
+        $role->permissions()->attach($permissions);
  
         return redirect()->route('roles.index')->with('success', 'The role has been added.');
     }
@@ -46,20 +54,32 @@ class RoleController extends Controller
     public function edit(string $id)
     {
         $role = Role::find($id);
-        return view('roles.edit', ['role' => $role]);
+        $permissions = Permission::all();
+        // $selectedPermissions = $role->permissions()->get(['permission_id'])->pluck('permission_id')->toArray();
+ 
+        return view('roles.edit', compact('role', 'permissions'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Role $role)
     {
         $data = request()->validate([
-            'name' => 'required|unique:roles|max:50',
+            
+            'permissions' => 'sometimes|array',
+            
         ]);
+        $permissions = $data['permissions'];
+        unset($data['permissions']);
+        
     
-        Role::updated($data);
-        return redirect()->route('roles.index')->with('success', 'The role has been updated.');
+        $role->update($data);
+$role->permissions()->sync($permissions);
+        // $role = $role->fresh();
+        
+        
+        return back()->with('Success');
     }
 
     /**

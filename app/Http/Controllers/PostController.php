@@ -14,17 +14,17 @@ use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
-    public function __construct()
-    {
-        $this->authorizeResource(Post::class, 'post');
-    }
+    // public function __construct()
+    // {
+    //     $this->authorizeResource(Post::class, 'post');
+    // }
     
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $this->authorize('viewAny', Post::class);
+        // $this->authorize('viewAny', Post::class);
         
         $posts = Post::orderBy('created_at', 'desc')->paginate(5);
         return view('posts.index', compact('posts'));
@@ -36,7 +36,7 @@ class PostController extends Controller
     public function create()
     {
         // $this->authorize('view', auth()->user());
-        $this->authorize('create', Post::class);
+        // $this->authorize('create', Post::class);
         $users = User::all();
         return view('posts.create', ['users' => $users]);
     }

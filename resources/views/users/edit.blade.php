@@ -49,32 +49,6 @@
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror
 
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" name="password" 
-            placeholder="Edit a password" id="password" 
-            class="form-control"
-            value="{{--decrypt($user->password) ?? old('password')--}}"
-            class="@error('password') is-invalid @enderror"
-            >
-        </div>
-        @error('password')
-            <div class="alert alert-danger">{{ $message }}</div>
-        @enderror
-
-        <div class="form-group">
-            <label for="password-confirm">Password confirm</label>
-            <input type="password" name="password_confirmation" 
-            placeholder="Edit a password confirmation" id="password-confirm" 
-            class="form-control"
-            value="{{ old('password_confirmation', $user->password_confirmation) }}"
-            class="@error('password_confirmation') is-invalid @enderror"
-            >
-        </div>
-        @error('password_confirmation')
-            <div class="alert alert-danger">{{ $message }}</div>
-        @enderror
-
         <div class="input-group mb-3">
             <label class="input-group-text" for="inputGroupSelectCategory">Users</label>
             <select class="form-select" name="role_id" id="inputGroupSelect01">
@@ -85,19 +59,6 @@
             </select>
         </div>
         @error('role_id')
-            <div class="alert alert-danger">{{ $message }}</div>
-        @enderror
-
-        <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupSelectPermissions">Permissions</label>
-            <select class="form-select" multiple name="permissions[]" id="inputGroupSelectPermissions">
-                <option disabled>Select permissions...</option>
-                @foreach($permissions as $permission)
-                <option value="{{ $permission->id }}" {{ in_array( $permission->id, old('permissions', $selectedPermissions))  ? 'selected' : ''}}>{{ $permission->name }}</option>
-                @endforeach
-            </select>
-        </div>
-        @error('permissions')
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror
 

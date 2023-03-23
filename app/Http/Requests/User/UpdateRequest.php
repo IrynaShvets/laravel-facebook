@@ -28,8 +28,6 @@ class UpdateRequest extends FormRequest
             'password' => 'required|string|min:8|confirmed',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'role_id' => 'bail|required|integer|exists:App\Models\Role,id',
-            'permissions' => 'required|array',
-            'permissions.*' => 'required|integer|exists:App\Models\Permission,id',
         ];
     }
 }

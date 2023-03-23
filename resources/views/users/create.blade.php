@@ -89,19 +89,6 @@
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror
 
-        <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupSelectPermissions">Permissions</label>
-            <select class="form-select" multiple name="permissions[]" id="inputGroupSelectPermissions">
-                <option disabled>Select permissions...</option>
-                @foreach($permissions as $permission)
-                    <option value="{{ $permission->id }}" {{ in_array( $permission->id, old('permissions', []))  ? 'selected' : ''}}>{{ $permission->name }}</option>
-                @endforeach
-            </select>
-        </div>
-        @error('permissions')
-            <div class="alert alert-danger">{{ $message }}</div>
-        @enderror
-
         <button type="submit" class="btn btn-success">Submit</button>
     </form>
 

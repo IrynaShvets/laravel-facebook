@@ -10,13 +10,15 @@ use Illuminate\Auth\Access\Response;
 class PostPolicy
 {
     use HandlesAuthorization;
+
+    const ROLE_ADMIN = 'admin';
     
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -32,7 +34,7 @@ class PostPolicy
      */
     public function create(User $user): bool
     {
-        return $user->id > 0;
+        return $user->id;
     }
 
     /**

@@ -29,7 +29,6 @@ class User extends Authenticatable
         'email',
         'password',
         'image',
-        'permission_id',
         'role_id',
     ];
 
@@ -58,20 +57,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class);
     }
-
-    public function permissions(): BelongsToMany
-    {
-        return $this->belongsToMany(Permission::class, 'permission_users', 'user_id', 'permission_id')->using(PermissionUser::class);
-    }
     
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
-    }
-
-    public function getAvatarImageAttribute() 
-    {
-        return Storage::url($this->image);
     }
 
     public function isAuth()
@@ -88,4 +77,5 @@ class User extends Authenticatable
             }
         }
     }
+
 }
