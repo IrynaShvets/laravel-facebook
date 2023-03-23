@@ -73,11 +73,9 @@ class RoleController extends Controller
         $permissions = $data['permissions'];
         unset($data['permissions']);
         
-    
         $role->update($data);
-$role->permissions()->sync($permissions);
+        $role->permissions()->sync($permissions);
         // $role = $role->fresh();
-        
         
         return back()->with('Success');
     }

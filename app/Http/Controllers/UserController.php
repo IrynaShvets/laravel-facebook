@@ -30,6 +30,8 @@ class UserController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', User::class);
+
         $roles = Role::all();
         return view('users.create', ['roles' => $roles]);
     }
@@ -39,9 +41,15 @@ class UserController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
+        $this->authorize('create', User::class);
 
-        $validated = $request->validated();
-       
+        $user = new User;
+        
+        $user->nane = $request->input('name');
+        $user->email = $request->input('email');
+        $user->password = $request->input('password');
+        $user->role_id = $request->input('role_id');
+
         if ($request->hasFile('image')) {
             $destination_path = 'images';
             $image = $request->file('image');
@@ -50,7 +58,7 @@ class UserController extends Controller
             $data['image'] = $path;
         }
         
-        User::create($data);
+        $user->save();
 
     return redirect()->route('users.index')->with('success', 'The post has been added.');
 }
@@ -69,7 +77,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        // $permissions = Permission::all();
+        $this->authorize('update', User::class);
         $roles = Role::all();
         
         return view('users.edit', compact('user', 'roles'));
@@ -80,6 +88,8 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $this->authorize('update', User::class);
+        
         $user = User::query()->findOrFail($id);
         $user->update($request->only('role_id'));
         return back()->with('Success');
@@ -90,6 +100,8 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
+        $this->authorize('delete', User::class);
+        
         User::find($id)->delete();
         return redirect()->route('users.index')->with('success', '204');
     }

@@ -8,13 +8,16 @@ use Illuminate\Auth\Access\Response;
 class AdminPolicy
 {
     const ROLE_ADMIN = 'admin';
+    const ROLE_USER = 'user';
+    const ROLE_MODERATOR = 'moderator';
+    const ROLE_DEVELOPER = 'developer';
    
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        
+        return false;
     }
 
     /**
@@ -22,8 +25,7 @@ class AdminPolicy
      */
     public function view(User $user, User $model): bool
     {
-        
-        return $model->role === self::ROLE_ADMIN;
+        return false;
     }
 
     /**
@@ -31,8 +33,16 @@ class AdminPolicy
      */
     public function create(User $user): bool
     {
-        // dd(1111);
-        // return $user->role === 'admin';
+        $user = User::find(auth()->user()->id);
+        if (asset($user->role()->first()->name)) {
+            $role = $user->role()->first()->name;
+            if($role === self::ROLE_ADMIN || $role === self::ROLE_MODERATOR || $role === self::ROLE_DEVELOPER){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
     }
 
     /**
@@ -40,7 +50,16 @@ class AdminPolicy
      */
     public function update(User $user, User $model): bool
     {
-        //
+        $user = User::find(auth()->user()->id);
+        if (asset($user->role()->first()->name)) {
+            $role = $user->role()->first()->name;
+            if($role === self::ROLE_ADMIN || $role === self::ROLE_DEVELOPER){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
     }
 
     /**
@@ -48,7 +67,16 @@ class AdminPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        //
+        $user = User::find(auth()->user()->id);
+        if (asset($user->role()->first()->name)) {
+            $role = $user->role()->first()->name;
+            if($role === self::ROLE_ADMIN){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
     }
 
     /**

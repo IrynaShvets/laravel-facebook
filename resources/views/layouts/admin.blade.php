@@ -35,6 +35,7 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
                                     <li><a href="{{ route('posts.index') }}" class="dropdown-item">All posts</a></li>
+                                    
                                     <li><a href="{{ route('posts.create') }}" class="dropdown-item">Create post</a></li>
                                 </ul>
                             </div>
@@ -47,7 +48,9 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
                                     <li><a href="{{ route('users.index') }}" class="dropdown-item">All users</a></li>
-                                    <li><a href="{{ route('users.create') }}" class="dropdown-item">Create user</a></li>
+                                    
+                                        <li><a href="{{ route('users.create') }}" class="dropdown-item">Create user</a></li>
+                                   
                                 </ul>
                             </div>
                         </li>
