@@ -4,13 +4,10 @@ namespace App\Policies;
 
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AdminPolicy
 {
-    const ROLE_ADMIN = 'admin';
-    const ROLE_USER = 'user';
-    const ROLE_MODERATOR = 'moderator';
-    const ROLE_DEVELOPER = 'developer';
    
     /**
      * Determine whether the user can view any models.
@@ -33,16 +30,12 @@ class AdminPolicy
      */
     public function create(User $user): bool
     {
-        $user = User::find(auth()->user()->id);
-        if (asset($user->role()->first()->name)) {
-            $role = $user->role()->first()->name;
-            if($role === self::ROLE_ADMIN || $role === self::ROLE_MODERATOR || $role === self::ROLE_DEVELOPER){
-                return true;
-            }
-            else{
-                return false;
-            }
+        $user = new User();
+        
+        if (!$user->isAuthCreate()) {
+            return false;
         }
+        return true;
     }
 
     /**
@@ -50,16 +43,12 @@ class AdminPolicy
      */
     public function update(User $user, User $model): bool
     {
-        $user = User::find(auth()->user()->id);
-        if (asset($user->role()->first()->name)) {
-            $role = $user->role()->first()->name;
-            if($role === self::ROLE_ADMIN || $role === self::ROLE_DEVELOPER){
-                return true;
-            }
-            else{
-                return false;
-            }
+        $user = new User();
+        
+        if (!$user->isAuthUpdate()) {
+            return false;
         }
+        return true;
     }
 
     /**
@@ -67,16 +56,12 @@ class AdminPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        $user = User::find(auth()->user()->id);
-        if (asset($user->role()->first()->name)) {
-            $role = $user->role()->first()->name;
-            if($role === self::ROLE_ADMIN){
-                return true;
-            }
-            else{
-                return false;
-            }
+        $user = new User();
+        
+        if (!$user->isAuth()) {
+            return false;
         }
+        return true;
     }
 
     /**

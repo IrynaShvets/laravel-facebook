@@ -18,6 +18,9 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     const ROLE_ADMIN = 'admin';
+    const ROLE_USER = 'user';
+    const ROLE_MODERATOR = 'moderator';
+    const ROLE_DEVELOPER = 'developer';
 
     /**
      * The attributes that are mass assignable.
@@ -57,25 +60,51 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class);
     }
-    
+
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
     }
-
+//isAdmin
     public function isAuth()
     {
         $user = User::find(auth()->user()->id);
         if (asset($user->role()->first()->name)) {
             $role = $user->role()->first()->name;
 
-            if($role === self::ROLE_ADMIN){
-            return true;
-            }
-            else{
+            if ($role === self::ROLE_ADMIN) {
+                return true;
+            } elseif ($role === self::ROLE_USER) {
+                return false;
+            } else {
                 return false;
             }
         }
     }
 
+    public function isAuthCreate()
+    {
+        $user = User::find(auth()->user()->id);
+        if (asset($user->role()->first()->name)) {
+            $role = $user->role()->first()->name;
+            if ($role === self::ROLE_ADMIN || $role === self::ROLE_MODERATOR || $role === self::ROLE_DEVELOPER) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public function isAuthUpdate()
+    {
+        $user = User::find(auth()->user()->id);
+        if (asset($user->role()->first()->name)) {
+            $role = $user->role()->first()->name;
+            if ($role === self::ROLE_ADMIN || $role === self::ROLE_MODERATOR || $role === self::ROLE_DEVELOPER) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 }

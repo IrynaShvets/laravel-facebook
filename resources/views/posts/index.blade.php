@@ -12,12 +12,12 @@
         <tr>
             <th scope="col">Post name</th>
             <th scope="col">Date created post</th>
-            <th scope="col">Show post</th>
-            <th scope="col">Edit post</th>
-            <th scope="col">Delete post</th>
+            <th scope="col">Access buttons</th>
         </tr>
     </thead>
+    
         @foreach ($posts as $post)
+        
         <tbody>
         <tr>
             <td>
@@ -29,14 +29,18 @@
             <td>
                 <a href="{{ route('posts.show', $post->id) }}"><button class="btn btn-success">Show post</button></a>
             </td>
-            <td>
-                <a href="{{route('posts.edit', $post->id)}}"><button class="btn btn-warning">Edit</button></a>
-            </td>
-            <td>
-                <button data-bs-toggle="modal" class="btn btn-danger" data-bs-target="#deletePostModal_{{$post->id}}"
-                    data-action="{{ route('posts.destroy', $post->id) }}">Delete
-                </button>
-            </td>
+            
+                <td>
+                    <a href="{{route('posts.edit', $post->id)}}"><button class="btn btn-warning">Edit</button></a>
+                </td>
+            
+                <td>
+                    <button data-bs-toggle="modal" class="btn btn-danger" data-bs-target="#deletePostModal_{{$post->id}}"
+                        data-action="{{ route('posts.destroy', $post->id) }}">Delete
+                    </button>
+                </td>
+           
+            
         </tr>
     </tbody>
                 <!-- Delete Post Modal -->
@@ -63,7 +67,8 @@
                     </div>
                 </div>
             </div>
-        @endforeach
+        
+    @endforeach
     </table>
     
     <div class="mt-3">

@@ -4,14 +4,15 @@ namespace App\Policies;
 
 use App\Models\Post;
 use App\Models\User;
+use GuzzleHttp\Psr7\Response as Psr7Response;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\Response as FacadesResponse;
 
 class PostPolicy
 {
     use HandlesAuthorization;
-
-    const ROLE_ADMIN = 'admin';
     
     /**
      * Determine whether the user can view any models.
@@ -26,7 +27,7 @@ class PostPolicy
      */
     public function view(User $user, Post $post): bool
     {
-        
+        return false;
     }
 
     /**
@@ -34,7 +35,12 @@ class PostPolicy
      */
     public function create(User $user): bool
     {
-        return $user->id;
+        $user = new User();
+        
+        if (!$user->isAuthCreate()) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -42,9 +48,7 @@ class PostPolicy
      */
     public function update(User $user, Post $post): Response
     {
-        return $user->id === $post->user_id
-                ? Response::allow()
-                : Response::deny('You do not own this post.');
+       //
     }
 
     /**
@@ -52,7 +56,12 @@ class PostPolicy
      */
     public function delete(User $user, Post $post): bool
     {
-        return $user->id == $post->user_id;
+        $user = new User();
+        
+        if (!$user->isAuth()) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -60,7 +69,7 @@ class PostPolicy
      */
     public function restore(User $user, Post $post): bool
     {
-        return Response::deny();
+        //
     }
 
     /**

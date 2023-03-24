@@ -14,20 +14,15 @@ use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->authorizeResource(Post::class, 'post');
-    // }
-    
+        
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        // $this->authorize('viewAny', Post::class);
-        
+        $users = User::all();
         $posts = Post::orderBy('created_at', 'desc')->paginate(5);
-        return view('posts.index', compact('posts'));
+        return view('posts.index', compact('posts', 'users'));
     }
 
     /**
@@ -35,8 +30,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        // $this->authorize('view', auth()->user());
-        // $this->authorize('create', Post::class);
+        $this->authorize('create', Post::class);
+
         $users = User::all();
         return view('posts.create', ['users' => $users]);
     }
@@ -47,9 +42,8 @@ class PostController extends Controller
     public function store(StoreRequest $request): RedirectResponse
     {
         
-        // if ($request->user()->cannot('create', Post::class)) {
-        //     abort(403);
-        // }
+        $this->authorize('create', Post::class);
+
         $post = new Post;
         
         $post->title = $request->input('title');
@@ -83,6 +77,8 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
+        $this->authorize('update', Post::class);
+
         $users = User::all();
         $post = Post::find($id);
         return view('posts.edit', ['post' => $post, 'users' => $users, ]);
@@ -93,13 +89,9 @@ class PostController extends Controller
      */
     public function update(StoreRequest $request, string $id)
     {
+        $this->authorize('update', Post::class);
         
         $post = Post::find($id);
-
-        // if ($request->user()->cannot('update', $post)) {
-        //     abort(403);
-        // }
-        // $this->authorize('update', $post);
 
         $post->title = $request->input('title');
         $post->description = $request->input('description');
@@ -115,7 +107,6 @@ class PostController extends Controller
             
         }
 
-
         $post->save();
         return redirect()->route('posts.index')->with('success', 'The post has been added.');
     }
@@ -125,6 +116,8 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
+        $this->authorize('delete', User::class);
+        
         $post = Post::find($id);
         $post->delete();
         Storage::delete($post->image);
