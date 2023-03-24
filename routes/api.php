@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Post\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Resources\UserCollection;
@@ -32,10 +34,8 @@ Route::group([
     Route::post('me', [AuthController::class, 'me']);
 });
 
-Route::group(['namespace' => 'Post', 'middleware' => 'jwt.auth'], function() {
-    Route::get('/post', function () {
-        return view('post');
-    })->name('post');
+Route::group(['namespace' => 'Post'], function() {
+    
     Route::get('/post/all', [PostController::class, 'allData']);
-    Route::post('/post/submit', [PostController::class, 'submit']);
+    
 });
