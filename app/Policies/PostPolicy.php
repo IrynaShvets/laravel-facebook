@@ -4,22 +4,26 @@ namespace App\Policies;
 
 use App\Models\Post;
 use App\Models\User;
-use GuzzleHttp\Psr7\Response as Psr7Response;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Auth\Access\Response;
-use Illuminate\Http\Response as HttpResponse;
-use Illuminate\Support\Facades\Response as FacadesResponse;
 
 class PostPolicy
 {
     use HandlesAuthorization;
-    
+
+    public function before(User $user, string $ability): bool|null
+    {
+        if ($user->isAdmin()) {
+            return true;
+        }
+        return null;
+    }
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $user->can('post.access');
     }
 
     /**
@@ -27,7 +31,7 @@ class PostPolicy
      */
     public function view(User $user, Post $post): bool
     {
-        return false;
+        return $user->can('post.show');
     }
 
     /**
@@ -35,20 +39,15 @@ class PostPolicy
      */
     public function create(User $user): bool
     {
-        $user = new User();
-        
-        if (!$user->isAuthCreate()) {
-            return false;
-        }
-        return true;
+        return $user->role_id == 3;
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Post $post): Response
+    public function update(User $user, Post $post): bool
     {
-       //
+        return in_array($user->role_id, [3, 4]) || (auth()->check() && $post->user_id == auth()->id());
     }
 
     /**
@@ -56,12 +55,7 @@ class PostPolicy
      */
     public function delete(User $user, Post $post): bool
     {
-        $user = new User();
-        
-        if (!$user->isAuth()) {
-            return false;
-        }
-        return true;
+        return in_array($user->role_id, [2]) || (auth()->check() && $post->user_id == auth()->id());
     }
 
     /**

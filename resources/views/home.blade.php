@@ -13,6 +13,9 @@
                             {{ session('status') }}
                         </div>
                     @endif
+                    <!-- @env ('local')
+                        <script src="http://localhost:3000/browser-sync/browser-sync-client.js"></script>
+                    @endenv -->
 
                     {{ __('You are logged in!') }}
                 </div>

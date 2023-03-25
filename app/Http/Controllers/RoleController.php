@@ -13,9 +13,10 @@ class RoleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $roles = Role::all();
+        
+        $roles = Role::orderBy('name','ASC')->paginate(5);
         return view('roles.index', compact('roles'));
     }
 
@@ -25,7 +26,7 @@ class RoleController extends Controller
     public function create()
     {
         $roles = Role::all();
-        $permissions = Permission::all();
+        $permissions = Permission::get();
         
         return view('roles.create', compact('roles', 'permissions'));
     }
@@ -48,17 +49,25 @@ class RoleController extends Controller
         return redirect()->route('roles.index')->with('success', 'The role has been added.');
     }
 
+    public function show(Role $role)
+    {
+        $role = $role;
+        $rolePermissions = $role->permissions;
+    
+        return view('roles.show', compact('role', 'rolePermissions'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+
+     public function edit(string $id)
     {
         $role = Role::find($id);
         $permissions = Permission::all();
-        // $selectedPermissions = $role->permissions()->get(['permission_id'])->pluck('permission_id')->toArray();
- 
         return view('roles.edit', compact('role', 'permissions'));
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -75,8 +84,6 @@ class RoleController extends Controller
         
         $role->update($data);
         $role->permissions()->sync($permissions);
-        // $role = $role->fresh();
-        
         return back()->with('Success');
     }
 
@@ -86,6 +93,7 @@ class RoleController extends Controller
     public function destroy(string $id)
     {
         Role::find($id)->delete();
+        
         return redirect()->route('roles.index')->with('success', '204');
     }
 }

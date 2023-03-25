@@ -3,16 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\User\StoreRequest;
-use App\Http\Requests\User\UpdateRequest;
 use Illuminate\Http\Request;
 use \App\Models\User;
-
-use App\Models\Permission;
-use App\Models\PermissionUser;
 use App\Models\Role;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -21,7 +15,6 @@ class UserController extends Controller
      */
     public function index()
     {
-        
         $users = User::paginate(5);
         return view('users.index', compact('users'));
     }
@@ -43,10 +36,10 @@ class UserController extends Controller
     public function store(StoreRequest $request): RedirectResponse
     {
         $this->authorize('create', User::class);
-
+        
         $user = new User;
         
-        $user->nane = $request->input('name');
+        $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->password = $request->input('password');
         $user->role_id = $request->input('role_id');
@@ -90,7 +83,7 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         $this->authorize('update', User::class);
-        
+
         $user = User::query()->findOrFail($id);
         $user->update($request->only('role_id'));
         return back()->with('Success');

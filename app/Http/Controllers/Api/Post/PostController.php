@@ -11,8 +11,7 @@ class PostController extends Controller
 
     public function allData(Request $request)
     {
-        //$this->authorize('view', auth()->user()); ban on entering the site
-        $data = $request->validated();
+        //$this->authorize('view', auth()->user());
 
         $page = $data['page'] ?? 1;
         $perPage = $data['per_page'] ?? 10;

@@ -3,18 +3,26 @@
 namespace App\Policies;
 
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
-class AdminPolicy
+class UserPolicy
 {
-   
+    use HandlesAuthorization;
+
+    public function before(User $user, string $ability): bool|null
+    {
+        if ($user->isAdmin()) {
+            return true;
+        }
+        return null;
+    }
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $user->can('user.access');
     }
 
     /**
@@ -22,7 +30,7 @@ class AdminPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return false;
+        return $user->can('user.access');
     }
 
     /**
@@ -30,12 +38,7 @@ class AdminPolicy
      */
     public function create(User $user): bool
     {
-        $user = new User();
-        
-        if (!$user->isAuthCreate()) {
-            return false;
-        }
-        return true;
+        return $user->role_id == 3;
     }
 
     /**
@@ -43,12 +46,7 @@ class AdminPolicy
      */
     public function update(User $user, User $model): bool
     {
-        $user = new User();
-        
-        if (!$user->isAuthUpdate()) {
-            return false;
-        }
-        return true;
+        return in_array($user->role_id, [4]) || (auth()->check() && $model->user_id == auth()->id());
     }
 
     /**
@@ -56,12 +54,7 @@ class AdminPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        $user = new User();
-        
-        if (!$user->isAuth()) {
-            return false;
-        }
-        return true;
+        return in_array($user->role_id, [2]) || (auth()->check() && $model->user_id == auth()->id());
     }
 
     /**

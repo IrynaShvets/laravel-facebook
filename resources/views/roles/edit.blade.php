@@ -7,18 +7,42 @@
 @section('content')
     <h1 class="text-white">Form for updating roles</h1>
 
-    <form action="{{ route('roles.update', ['role' => $role->id]) }}" method="post" enctype="multipart/form-data">
+    <form class="" action="{{ route('roles.update', ['role' => $role->id]) }}" method="post" enctype="multipart/form-data">
         @csrf
         @method('PATCH')
+
+        <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input value="{{ $role->name }}" 
+                        type="text" 
+                        class="form-control" 
+                        name="name" 
+                        placeholder="Name" required>
+                </div>
        
-        <div class="col-md-4 bg-white">
-            @foreach($permissions as $permission)
-            <input type="checkbox" class="form-check-input" name="permissions[]" @foreach($role->permissions as $rolePermission) {{ $permission->id === $rolePermission ? 'checked' : '' }} @endforeach
-                value="{{ $permission->id }}" id="{{ $permission->id }}">
-                {{ $permission->name }}
-                <br/>
-            @endforeach
-        </div>
+        <label for="permissions" class="form-label">Assign Permissions</label>
+
+                <table class="table table-striped text-white">
+                    <thead>
+                        <th scope="col" width="1%"><input type="checkbox" name="all_permission"></th>
+                        <th scope="col" width="20%">Name</th>
+                        <th scope="col" width="1%">Guard</th> 
+                    </thead>
+
+                    @foreach($permissions as $permission)
+                        <tr>
+                            <td>
+                                <input type="checkbox" 
+                                name="permissions[{{ $permission->id }}]"
+                                value="{{ $permission->id }}" 
+                                @foreach($role->permissions as $rolePermission) {{ $permission->id === $rolePermission ? 'checked' : '' }} @endforeach>
+                            </td>
+                            <td class="text-white">{{ $permission->name }}</td>
+                            <td class="text-white">{{ $permission->description }}</td>
+                        </tr>
+                    @endforeach
+                </table>
+
         @error('permissions')
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror

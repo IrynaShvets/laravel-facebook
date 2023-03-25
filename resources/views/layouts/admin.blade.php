@@ -37,6 +37,7 @@
                                     <li><a href="{{ route('posts.index') }}" class="dropdown-item">All posts</a></li>
                                     
                                     <li><a href="{{ route('posts.create') }}" class="dropdown-item">Create post</a></li>
+                                    
                                 </ul>
                             </div>
                         </li>
@@ -54,22 +55,19 @@
                                 </ul>
                             </div>
                         </li>
-
-                       
-                            <li class="nav-item">
-                                <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
-                                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownRole" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <span class="d-none d-sm-inline mx-1 text-dark">Roles</span>
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownRole">
-                                        <li><a href="{{ route('roles.index') }}" class="dropdown-item">All roles</a></li>
-                                        <li><a href="{{ route('roles.create') }}" class="dropdown-item">Create role</a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                       
                         
-
+                           <li class="nav-item">
+                            <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
+                                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownRole" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="d-none d-sm-inline mx-1 text-dark">Roles</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownRole">
+                                    <li><a href="{{ route('roles.index') }}" class="dropdown-item">All roles</a></li>
+                                    <li><a href="{{ route('roles.create') }}" class="dropdown-item">Create role</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                      
                         <li class="nav-item">
                             <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
                                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownPermissions" data-bs-toggle="dropdown" aria-expanded="false">
@@ -83,6 +81,7 @@
                         </li>
                     </ul>
                     
+                        
                     <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
                     @isset(Auth::user()->name)
                     <img src="https://i.gyazo.com/50c000c0e4715eba3a2d778c01ac1c5c.png" alt="avatar" width="28" height="28" class="rounded-circle">

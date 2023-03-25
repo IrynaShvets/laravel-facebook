@@ -18,7 +18,7 @@ class AdminMiddleware
     {
         $user = new User();
         
-        if (!$user->isAuth()) {
+        if (!$user->isAdmin()) {
             abort(403);
         }
         

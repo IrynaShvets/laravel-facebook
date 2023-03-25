@@ -3,18 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use \App\Models\Post;
 use \App\Models\User;
 use \App\Http\Requests\Post\StoreRequest;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
-        
+    
     /**
      * Display a listing of the resource.
      */

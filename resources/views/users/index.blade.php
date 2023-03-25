@@ -32,13 +32,13 @@
                 <td>
                     <a href="{{route('users.edit', $user->id)}}"><button class="btn btn-warning">Edit</button></a>
                 </td>
-            @endcan
+           @endcan
            
-            @can('delete', $user)
+           @can('delete', $user)
                 <td>
                     <button data-bs-toggle="modal" class="btn bg-secondary text-white" data-bs-target="#deleteUserModal_{{$user->id}}" data-action="{{ route('users.destroy', $user->id) }}">Delete</button>
                 </td>
-            @endcan
+                @endcan
         </tr>
     </tbody>
 

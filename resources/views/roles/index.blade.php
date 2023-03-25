@@ -10,6 +10,7 @@
     <thead class="">
         <tr>
             <th scope="col">Role name</th>
+            <th scope="col">Role show</th>
             <th scope="col">Edit role</th>
             <th scope="col">Delete role</th>
         </tr>
@@ -21,6 +22,9 @@
         <tr>
             <td>
                 <h5>{{ $role->name }}</h5>
+            </td>
+            <td>
+                <a href="{{ route('roles.show', $role->id) }}"><button class="btn btn-success">Show role</button></a>
             </td>
             <td>
                 <a href="{{route('roles.edit', $role->id)}}"><button class="btn btn-warning">Edit</button></a>
@@ -56,5 +60,9 @@
     </div>
     @endforeach
 </table>
+
+<div class="mt-3">
+    {{ $roles->withQueryString()->links() }}
+</div>
 
 @endsection
