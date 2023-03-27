@@ -1,12 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\PostController;
-use \App\Http\Controllers\AdminController;
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\PermissionRoleController;
-use App\Http\Controllers\RoleController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\PostController;
+use \App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\RoleController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 

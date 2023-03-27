@@ -11,15 +11,10 @@ class PostController extends Controller
 
     public function allData(Request $request)
     {
-        //$this->authorize('view', auth()->user());
-
         $page = $data['page'] ?? 1;
         $perPage = $data['per_page'] ?? 10;
-
         $posts = Post::paginate($perPage, ['*'], 'page', $page);
-
         return PostResource::collection($posts);
-
     }
 
 }

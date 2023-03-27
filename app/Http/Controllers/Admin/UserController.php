@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\User\StoreRequest;
 use Illuminate\Http\Request;
 use \App\Models\User;
 use App\Models\Role;
 use Illuminate\Http\RedirectResponse;
+use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
