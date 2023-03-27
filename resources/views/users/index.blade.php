@@ -28,17 +28,12 @@
             <td>
                 <a href="{{ route('users.show', $user->id) }}"><button class="btn btn-success">Show user</button></a>
             </td>
-            @can('update', $user)
-                <td>
-                    <a href="{{route('users.edit', $user->id)}}"><button class="btn btn-warning">Edit</button></a>
-                </td>
-           @endcan
-           
-           @can('delete', $user)
-                <td>
-                    <button data-bs-toggle="modal" class="btn bg-secondary text-white" data-bs-target="#deleteUserModal_{{$user->id}}" data-action="{{ route('users.destroy', $user->id) }}">Delete</button>
-                </td>
-                @endcan
+            <td>
+                <a href="{{route('users.edit', $user->id)}}"><button class="btn btn-warning">Edit</button></a>
+            </td>
+            <td>
+                <button data-bs-toggle="modal" class="btn bg-secondary text-white" data-bs-target="#deleteUserModal_{{$user->id}}" data-action="{{ route('users.destroy', $user->id) }}">Delete</button>
+            </td>
         </tr>
     </tbody>
 

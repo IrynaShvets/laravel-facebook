@@ -17,6 +17,8 @@ class PostController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Post::class);
+        
         $users = User::all();
         $posts = Post::orderBy('created_at', 'desc')->paginate(5);
         return view('posts.index', compact('posts', 'users'));
@@ -65,6 +67,8 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
+        $this->authorize('view', Post::class);
+
         $post = Post::find($id);
         return view('posts.show', ['post' => $post]);
     }
@@ -113,7 +117,7 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->authorize('delete', User::class);
+        $this->authorize('delete', Post::class);
         
         $post = Post::find($id);
         $post->delete();

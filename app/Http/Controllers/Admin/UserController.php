@@ -16,6 +16,8 @@ class UserController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', User::class);
+        
         $users = User::paginate(5);
         return view('users.index', compact('users'));
     }
@@ -63,6 +65,7 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
+        $this->authorize('view', User::class);
         $user = User::find($id);
         return view('users.show', ['user' => $user]);
     }

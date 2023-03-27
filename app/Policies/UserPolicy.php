@@ -9,28 +9,20 @@ class UserPolicy
 {
     use HandlesAuthorization;
 
-    public function before(User $user, string $ability): bool|null
-    {
-        if ($user->isAdmin()) {
-            return true;
-        }
-        return null;
-    }
-
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('user.access');
+        return $user->role->permissions->contains('name', 'user.access');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, User $model): bool
+    public function view(User $user): bool
     {
-        return $user->can('user.access');
+        return $user->role->permissions->contains('name', 'user.access');
     }
 
     /**
@@ -38,23 +30,23 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role_id == 3;
+        return $user->role->permissions->contains('name', 'user.create');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, User $model): bool
+    public function update(User $user): bool
     {
-        return in_array($user->role_id, [4]) || (auth()->check() && $model->user_id == auth()->id());
+        return $user->role->permissions->contains('name', 'user.update');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, User $model): bool
+    public function delete(User $user): bool
     {
-        return in_array($user->role_id, [2]) || (auth()->check() && $model->user_id == auth()->id());
+        return $user->role->permissions->contains('name', 'user.delete');
     }
 
     /**

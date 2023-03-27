@@ -33,12 +33,12 @@ Route::get('/home', function () {
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/admin', [AdminController::class, 'index'])->name('layouts.admin');
-    Route::resource('roles', RoleController::class)->middleware('admin');
+    Route::resource('roles', RoleController::class);
     Route::resource('posts', PostController::class);
     Route::resource('users', UserController::class);
     Route::resource('permissions', PermissionController::class)->except([
         'show', 'edit', 'update'
-    ])->middleware('admin');
+    ]);
 });
 
 Route::get('get/file', function () {

@@ -29,18 +29,13 @@ All posts
             <td>
                 <a href="{{ route('posts.show', $post->id) }}"><button class="btn btn-success">Show post</button></a>
             </td>
-            @can('update', $post)
             <td>
                 <a href="{{route('posts.edit', $post->id)}}"><button class="btn btn-warning">Edit</button></a>
             </td>
-            @endcan
-            @can('delete', $post)
             <td>
                 <button data-bs-toggle="modal" class="btn btn-danger" data-bs-target="#deletePostModal_{{$post->id}}" data-action="{{ route('posts.destroy', $post->id) }}">Delete
                 </button>
             </td>
-            @endcan
-
         </tr>
     </tbody>
     <!-- Delete Post Modal -->

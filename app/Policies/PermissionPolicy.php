@@ -2,20 +2,18 @@
 
 namespace App\Policies;
 
-use App\Models\Post;
+use App\Models\Permission;
 use App\Models\User;
-use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
-class PostPolicy
+class PermissionPolicy
 {
-    use HandlesAuthorization;
-
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return $user->role->permissions->contains('name', 'post.access');
+        return $user->role->permissions->contains('name', 'permission.access');
     }
 
     /**
@@ -23,7 +21,7 @@ class PostPolicy
      */
     public function view(User $user): bool
     {
-        return $user->role->permissions->contains('name', 'post.access');
+        return $user->role->permissions->contains('name', 'permission.access');
     }
 
     /**
@@ -31,7 +29,7 @@ class PostPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role->permissions->contains('name', 'post.create');
+        return $user->role->permissions->contains('name', 'permission.create');
     }
 
     /**
@@ -39,21 +37,21 @@ class PostPolicy
      */
     public function update(User $user): bool
     {
-        return $user->role->permissions->contains('name', 'post.update');
+        return $user->role->permissions->contains('name', 'permission.update');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Post $post): bool
+    public function delete(User $user): bool
     {
-        return $user->role->permissions->contains('name', 'post.delete');
+        return $user->role->permissions->contains('name', 'permission.delete');
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Post $post): bool
+    public function restore(User $user, Permission $permission): bool
     {
         //
     }
@@ -61,7 +59,7 @@ class PostPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Post $post): bool
+    public function forceDelete(User $user, Permission $permission): bool
     {
         //
     }
