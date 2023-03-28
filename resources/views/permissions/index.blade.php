@@ -57,5 +57,8 @@
     </div>
     @endforeach
 </table>
+<div class="mt-3">
+    {{ $permissions->withQueryString()->links() }}
+</div>
 
 @endsection

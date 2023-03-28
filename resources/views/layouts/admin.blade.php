@@ -88,6 +88,7 @@
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ Auth::user()->name }} 
                         </a>
+                        <!-- <p>{{ Auth::user()->name }} </p> -->
                        
                         @endisset
                         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
@@ -109,12 +110,12 @@
                     <div class="col pt-4">
                     
                         <!-- Main content -->
-                        <section class="content">
+                        <section class="content px-sm-4">
                             @yield('content')
                         </section>
                     </div>
                 </main>
-                <footer class="row bg-dark py-4 mt-auto">
+                <footer class="row bg-secondary py-4 mt-auto">
                     <div class="col"> Footer content here... </div>
                 </footer>
             </div>

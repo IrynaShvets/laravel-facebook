@@ -23,7 +23,7 @@ class PostPolicy
      */
     public function view(User $user): bool
     {
-        return $user->role->permissions->contains('name', 'post.access');
+        return $user->role->permissions->contains('name', 'post.show');
     }
 
     /**

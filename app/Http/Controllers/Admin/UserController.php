@@ -8,6 +8,7 @@ use \App\Models\User;
 use App\Models\Role;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -39,7 +40,7 @@ class UserController extends Controller
     public function store(StoreRequest $request): RedirectResponse
     {
         $this->authorize('create', User::class);
-        
+        Auth::user()->name;
         $user = new User;
         
         $user->name = $request->input('name');
