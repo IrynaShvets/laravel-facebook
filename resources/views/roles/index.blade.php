@@ -10,9 +10,7 @@
     <thead class="">
         <tr>
             <th scope="col">Role name</th>
-            <th scope="col">Role show</th>
-            <th scope="col">Edit role</th>
-            <th scope="col">Delete role</th>
+            <th scope="col">Access buttons</th>
         </tr>
     </thead>
 
@@ -26,12 +24,16 @@
             <td>
                 <a href="{{ route('roles.show', $role->id) }}"><button class="btn btn-success">Show role</button></a>
             </td>
+            @can('update', $role)
             <td>
                 <a href="{{route('roles.edit', $role->id)}}"><button class="btn btn-warning">Edit</button></a>
             </td>
+            @endcan
+            @can('delete', $role)
             <td>
                 <button data-bs-toggle="modal" class="btn bg-secondary text-white" data-bs-target="#deleteRoleModal_{{$role->id}}" data-action="{{ route('roles.destroy', $role->id) }}">Delete</button>
             </td>
+            @endcan
         </tr>
     </tbody>
 

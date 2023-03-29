@@ -8,7 +8,9 @@ use \App\Models\User;
 use App\Models\Role;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\UpdateRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -45,13 +47,13 @@ class UserController extends Controller
         
         $user->name = $request->input('name');
         $user->email = $request->input('email');
-        $user->password = $request->input('password');
+        $user->password = Hash::make($request->input('password'));
         $user->role_id = $request->input('role_id');
 
         if ($request->hasFile('image')) {
             $destination_path = 'images';
             $image = $request->file('image');
-            $image_name = time()."_".$image->getClientOriginalName();           
+            $image_name = date('d-m-Y')."_".$image->getClientOriginalName();           
             $path = $request->file('image')->storeAs($destination_path , $image_name, 'public');
             $data['image'] = $path;
         }
@@ -85,13 +87,13 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateRequest $request, string $id)
     {
         $this->authorize('update', User::class);
 
         $user = User::query()->findOrFail($id);
         $user->update($request->only('role_id'));
-        return back()->with('Success');
+        return redirect()->route('users.index')->with('Success');
     }
 
     /**

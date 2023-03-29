@@ -25,9 +25,11 @@
             <td>
                 <h5>{{ $permission->description }}</h5>
             </td>
+            @can('delete', $permission)
             <td>
                 <button data-bs-toggle="modal" class="btn bg-secondary text-white" data-bs-target="#deletePermissionModal_{{$permission->id}}" data-action="{{ route('permissions.destroy', $permission->id) }}">Delete</button>
             </td>
+            @endcan
         </tr>
     </tbody>
 

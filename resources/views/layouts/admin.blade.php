@@ -25,27 +25,25 @@
             <div class="col-12 col-sm-3 col-xl-2 px-sm-2 px-0 bg-secondary d-flex sticky-top">
                 <div class="d-flex flex-sm-column flex-row flex-grow-1 align-items-center align-items-sm-start px-3 pt-2 text-white">
                     <a href="{{ route('layouts.admin') }}" class="d-flex align-items-center pb-sm-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-                        <span class="fs-5">Admin panel</span>
+                        <span class="h3">Admin panel</span>
                     </a>
                     <ul class="nav nav-pills flex-sm-column flex-row flex-nowrap flex-shrink-1 flex-sm-grow-0 flex-grow-1 mb-sm-auto mb-0 justify-content-center align-items-center align-items-sm-start" id="menu">
                         <li class="nav-item">
-                            <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
+                            <div class="dropdown py-sm-2 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
                                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <span class="d-none d-sm-inline mx-1 text-dark">Posts</span>
+                                    <span class="d-none d-sm-inline mx-1 text-dark h5">Posts</span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
                                     <li><a href="{{ route('posts.index') }}" class="dropdown-item">All posts</a></li>
-                                    
                                     <li><a href="{{ route('posts.create') }}" class="dropdown-item">Create post</a></li>
-                                    
                                 </ul>
                             </div>
                         </li>
 
                         <li class="nav-item">
-                            <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
+                            <div class="dropdown py-sm-2 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
                                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <span class="d-none d-sm-inline mx-1 text-dark">Users</span>
+                                    <span class="d-none d-sm-inline mx-1 text-dark h5">Users</span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
                                     <li><a href="{{ route('users.index') }}" class="dropdown-item">All users</a></li>
@@ -57,9 +55,9 @@
                         </li>
                         
                            <li class="nav-item">
-                            <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
+                            <div class="dropdown py-sm-2 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
                                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownRole" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <span class="d-none d-sm-inline mx-1 text-dark">Roles</span>
+                                    <span class="d-none d-sm-inline mx-1 text-dark h5">Roles</span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownRole">
                                     <li><a href="{{ route('roles.index') }}" class="dropdown-item">All roles</a></li>
@@ -69,9 +67,9 @@
                         </li>
                       
                         <li class="nav-item">
-                            <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
+                            <div class="dropdown py-sm-2 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
                                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownPermissions" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <span class="d-none d-sm-inline mx-1 text-dark">Permissions</span>
+                                    <span class="d-none d-sm-inline mx-1 text-dark h5">Permissions</span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownPermissions">
                                     <li><a href="{{ route('permissions.index') }}" class="dropdown-item">All permissions</a></li>
@@ -88,7 +86,7 @@
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ Auth::user()->name }} 
                         </a>
-                        <!-- <p>{{ Auth::user()->name }} </p> -->
+                        <h4>{{ Auth::user()->role->name }} </h4>
                        
                         @endisset
                         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">

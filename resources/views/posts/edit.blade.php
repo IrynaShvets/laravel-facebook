@@ -60,14 +60,20 @@
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror
 
-        <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupSelectCategory">Users</label>
-            <select class="form-select" name="user_id" id="inputGroupSelect01">
-                <option disabled>Select user...</option>
-                @foreach($users as $user)
-                    <option value="{{ $user->id }}" >{{ $user->name }}</option>
+        <div class="form-group mb-3">
+        <label class="block">
+            <span class="text-gray-700">Select user</span>
+            <select name="user_id" class="form-select">
+                @foreach ($users as $user)
+                    <option @selected($user->id == $post->user_id) value="{{ $user->id }}"
+                        @class([
+                        'bg-dark-600 text-dark' => $user->id == $post->user_id
+                        ])>
+                        {{ $user->name }}
+                    </option>
                 @endforeach
-            </select>
+                </select>
+            </label>
         </div>
         @error('user_id')
             <div class="alert alert-danger">{{ $message }}</div>

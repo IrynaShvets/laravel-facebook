@@ -23,7 +23,7 @@ class PostPolicy
      */
     public function view(User $user): bool
     {
-        return $user->role->permissions->contains('name', 'post.show');
+        return $user->role->permissions->contains('name', 'post.access');
     }
 
     /**
@@ -45,7 +45,7 @@ class PostPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Post $post): bool
+    public function delete(User $user): bool
     {
         return $user->role->permissions->contains('name', 'post.delete');
     }

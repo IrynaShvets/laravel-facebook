@@ -22,7 +22,7 @@ class UserPolicy
      */
     public function view(User $user): bool
     {
-        return $user->role->permissions->contains('name', 'user.show');
+        return $user->role->permissions->contains('name', 'user.access');
     }
 
     /**

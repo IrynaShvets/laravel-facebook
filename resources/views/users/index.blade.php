@@ -10,7 +10,6 @@
     <thead class="">
         <tr>
             <th scope="col">User name</th>
-            <th scope="col">Date created user</th>
             <th scope="col">Access buttons</th>
         </tr>
     </thead>
@@ -24,16 +23,19 @@
             <td>
                 <h6 class="card-subtitle mb-2">{{ $user->created_at }}</h6>
             </td>
-
             <td>
                 <a href="{{ route('users.show', $user->id) }}"><button class="btn btn-success">Show user</button></a>
             </td>
+            @can('update', $user)
             <td>
                 <a href="{{route('users.edit', $user->id)}}"><button class="btn btn-warning">Edit</button></a>
             </td>
+            @endcan
+            @can('delete', $user)
             <td>
                 <button data-bs-toggle="modal" class="btn bg-secondary text-white" data-bs-target="#deleteUserModal_{{$user->id}}" data-action="{{ route('users.destroy', $user->id) }}">Delete</button>
             </td>
+            @endcan
         </tr>
     </tbody>
 

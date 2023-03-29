@@ -21,7 +21,7 @@ class RolePolicy
      */
     public function view(User $user): bool
     {
-        return $user->role->permissions->contains('name', 'role.show');
+        return $user->role->permissions->contains('name', 'role.access');
     }
 
     /**

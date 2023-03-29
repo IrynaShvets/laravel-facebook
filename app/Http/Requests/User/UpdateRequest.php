@@ -21,12 +21,7 @@ class UpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|exists:users,email',
-            'password' => 'required|string|min:8|confirmed',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'role_id' => 'bail|required|integer|exists:App\Models\Role,id',
         ];
     }
