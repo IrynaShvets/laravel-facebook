@@ -61,7 +61,8 @@ class AuthController extends Controller
     {
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
-                'message' => 'Invalid login details'
+                'email' => 'Authentication email or password is not valid.',
+                'password' => 'Authentication email or password is not valid.'
             ], 401);
         }
         $user = User::where('email', $request['email'])->firstOrFail();
