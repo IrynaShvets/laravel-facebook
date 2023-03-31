@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\LoginRequest;
+use App\Http\Requests\User\RegisterRequest;
 use App\Http\Requests\User\StoreRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
@@ -15,9 +16,15 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    public function register(StoreRequest $request)
+    public function register(Request $request)
     {
-        $validator = Validator::make($request->all());
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users|max:255',
+            'password' => 'required|min:8',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        
        
         if ($validator->fails()) {
             $errors = $validator->errors();
@@ -31,10 +38,19 @@ class AuthController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
+                'image' => $request->image,
             ]);
+            if ($request->hasFile('image')) {
+                $destination_path = 'images';
+                $image = $request->file('image');
+                $image_name = date('d-m-Y')."_".$image->getClientOriginalName();           
+                $path = $request->file('image')->storeAs($destination_path , $image_name, 'public');
+                $user['image'] = $path;
+            }
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
+                'user' => $user,
                 'access_token' => $token,
                 'token_type' => 'Bearer',
             ]);
