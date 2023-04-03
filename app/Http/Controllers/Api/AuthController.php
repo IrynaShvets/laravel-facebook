@@ -11,21 +11,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users|max:255',
-            'password' => 'required|min:8',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+        $validator = Validator::make($request->all());
         
-       
         if ($validator->fails()) {
             $errors = $validator->errors();
             return response()->json([
@@ -38,15 +33,18 @@ class AuthController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'image' => $request->image,
+                
             ]);
+           
             if ($request->hasFile('image')) {
                 $destination_path = 'images';
                 $image = $request->file('image');
                 $image_name = date('d-m-Y')."_".$image->getClientOriginalName();           
                 $path = $request->file('image')->storeAs($destination_path , $image_name, 'public');
-                $user['image'] = $path;
+                $user->image = $path;
+                Storage::disk('s3')->put($path, file_get_contents($image));
             }
+            
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
@@ -66,6 +64,7 @@ class AuthController extends Controller
             ], 401);
         }
         $user = User::where('email', $request['email'])->firstOrFail();
+
         Auth::login($user);
         $token = $user->createToken('auth_token')->plainTextToken;
         return response()->json([
@@ -96,8 +95,25 @@ class AuthController extends Controller
         return response()->json(['message' => 'Logged out']);
     }
 
-    public function getUser(Request $request)
+    // public function getUser(Request $request)
+    // {
+    //     return $request->user();
+    // }
+
+    public function getUser()
     {
-        return $request->user();
+        if (Auth::check()) {
+            return new UserResource(Auth::user());
+        } else {
+            return response()->json(['error' => 'Unauthenticated.'], 404);
+        }
     }
+
+    public function uploadImage(Request $request){
+        if($request->hasfile('image')){
+            return "Yes";
+        }
+        else{return "No";}
+    }
+
 }
