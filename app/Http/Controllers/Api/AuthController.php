@@ -25,15 +25,15 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
         
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            return response()->json([
-                'error' => $errors
-            ], 400);
-        }
+        // if ($validator->fails()) {
+        //     $errors = $validator->errors();
+        //     return response()->json([
+        //         'error' => $errors
+        //     ], 400);
+        // }
         
         if ($validator->passes()) {
             $user = User::create([
@@ -51,7 +51,7 @@ class AuthController extends Controller
                 $user->image = $path;
                 Storage::disk('s3')->put($path, file_get_contents($image));
             }
-            
+     
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
@@ -73,6 +73,7 @@ class AuthController extends Controller
         $user = User::where('email', $request['email'])->firstOrFail();
 
         Auth::login($user);
+        
         $token = $user->createToken('auth_token')->plainTextToken;
         return response()->json([
             'user' => $user,
@@ -95,10 +96,11 @@ class AuthController extends Controller
         if (!$user) {
             return response()->json(['message' => 'Logged out']);
         }
-        
+        $request->user()->token()->revoke();
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        
         return response()->json(['message' => 'Logged out']);
     }
 

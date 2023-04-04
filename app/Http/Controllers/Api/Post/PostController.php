@@ -45,7 +45,7 @@ class PostController extends Controller
           'description' => 'required|min:5|max:100|string',
           'user_id' => 'required|integer|exists:users,id',
           'body' => 'required|min:5|string',
-          'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+          'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
       ]);
       
       if ($validator->fails()) {
@@ -61,7 +61,7 @@ class PostController extends Controller
               'description' => $request->description,
               'body' => $request->body,
               'image' => $request->image,
-              'user_id' => $request->user_id,
+              'user_id' => $request->user()->id,
           ]);
          
           if ($request->hasFile('image')) {
