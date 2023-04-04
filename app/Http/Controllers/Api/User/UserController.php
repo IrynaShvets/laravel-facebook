@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $page = $data['page'] ?? 1;
+        $perPage = $data['per_page'] ?? 10;
+        $users = User::paginate($perPage, ['*'], 'page', $page);
+        return UserResource::collection($users);
     }
 
     /**

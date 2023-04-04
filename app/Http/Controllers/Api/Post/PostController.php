@@ -7,35 +7,79 @@ use App\Http\Requests\Post\StoreRequest;
 use App\Http\Resources\Post\PostResource;
 use Illuminate\Http\Request;
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+
 class PostController extends Controller
 {
 
     public function allData(Request $request)
     {
-        
         $page = $data['page'] ?? 1;
         $perPage = $data['per_page'] ?? 10;
         $posts = Post::paginate($perPage, ['*'], 'page', $page);
         return PostResource::collection($posts);
     }
 
-    public function store(StoreRequest $request)
+    public function store(Request $request)
     {
-        $post = Post::create([
-            'user_id' => $request->user()->id,
-            'title' => $request->title,
-            'description' => $request->description,
-            'body' => $request->body,
-        ]);
+        // $post = Post::create([
+        //     'user_id' => $request->user()->id,
+        //     'title' => $request->title,
+        //     'description' => $request->description,
+        //     'body' => $request->body,
+        // ]);
     
-        if ($request->hasFile('image')) {
-            $destination_path = 'images';
-            $image = $request->file('image');
-            $image_name = time()."_".$image->getClientOriginalName();           
-            $path = $request->file('image')->storeAs($destination_path , $image_name, 'public');
-            $post['image'] = $path;
-        }
-        return new PostResource($post);
+        // if ($request->hasFile('image')) {
+        //     $destination_path = 'images';
+        //     $image = $request->file('image');
+        //     $image_name = time()."_".$image->getClientOriginalName();           
+        //     $path = $request->file('image')->storeAs($destination_path , $image_name, 'public');
+        //     $post['image'] = $path;
+        // }
+        // return new PostResource($post);
+
+        $validator = Validator::make($request->all(), [
+          'title' => 'required|min:5|max:255|string',
+          'description' => 'required|min:5|max:100|string',
+          'user_id' => 'required|integer|exists:users,id',
+          'body' => 'required|min:5|string',
+          'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+      ]);
+      
+      if ($validator->fails()) {
+          $errors = $validator->errors();
+          return response()->json([
+              'error' => $errors
+          ], 400);
+      }
+      
+      if ($validator->passes()) {
+          $post = Post::create([
+              'title' => $request->title,
+              'description' => $request->description,
+              'body' => $request->body,
+              'image' => $request->image,
+              'user_id' => $request->user_id,
+          ]);
+         
+          if ($request->hasFile('image')) {
+              $destination_path = 'images';
+              $image = $request->file('image');
+              $image_name = date('d-m-Y')."_".$image->getClientOriginalName();           
+              $path = $request->file('image')->storeAs($destination_path , $image_name, 'public');
+              $post->image = $path;
+              Storage::disk('s3')->put($path, file_get_contents($image));
+          }
+          
+         
+
+          return response()->json([
+              'post' => $post,
+              
+          ]);
+      }
     }
 
     public function show(Post $post)

@@ -19,7 +19,14 @@ class AuthController extends Controller
 {
     public function register(RegisterRequest $request)
     {
-        $validator = Validator::make($request->all());
+        // $validator = Validator::make($request->all());
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
         
         if ($validator->fails()) {
             $errors = $validator->errors();
@@ -94,11 +101,6 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
         return response()->json(['message' => 'Logged out']);
     }
-
-    // public function getUser(Request $request)
-    // {
-    //     return $request->user();
-    // }
 
     public function getUser()
     {
