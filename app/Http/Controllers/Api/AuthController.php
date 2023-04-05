@@ -49,7 +49,9 @@ class AuthController extends Controller
                 $image_name = date('d-m-Y')."_".$image->getClientOriginalName();           
                 $path = $request->file('image')->storeAs($destination_path , $image_name, 'public');
                 $user->image = $path;
-                Storage::disk('s3')->put($path, file_get_contents($image));
+
+                $user->save();
+                // Storage::disk('s3')->put($path, file_get_contents($image));
             }
      
             $token = $user->createToken('auth_token')->plainTextToken;

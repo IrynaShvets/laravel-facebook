@@ -16,9 +16,9 @@ class PostController extends Controller
 
     public function allData(Request $request)
     {
-        $page = $data['page'] ?? 1;
-        $perPage = $data['per_page'] ?? 10;
-        $posts = Post::paginate($perPage, ['*'], 'page', $page);
+        // $page = $data['page'] ?? 1;
+        // $perPage = $data['per_page'] ?? 10;paginate($perPage, ['*'], 'page', $page)
+        $posts = Post::all();
         return PostResource::collection($posts);
     }
 
@@ -48,12 +48,12 @@ class PostController extends Controller
           'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
       ]);
       
-      if ($validator->fails()) {
-          $errors = $validator->errors();
-          return response()->json([
-              'error' => $errors
-          ], 400);
-      }
+      // if ($validator->fails()) {
+      //     $errors = $validator->errors();
+      //     return response()->json([
+      //         'error' => $errors
+      //     ], 400);
+      // }
       
       if ($validator->passes()) {
           $post = Post::create([
@@ -70,14 +70,12 @@ class PostController extends Controller
               $image_name = date('d-m-Y')."_".$image->getClientOriginalName();           
               $path = $request->file('image')->storeAs($destination_path , $image_name, 'public');
               $post->image = $path;
-              Storage::disk('s3')->put($path, file_get_contents($image));
+              $post->save();
+            //   Storage::disk('s3')->put($path, file_get_contents($image));
           }
           
-         
-
           return response()->json([
               'post' => $post,
-              
           ]);
       }
     }
