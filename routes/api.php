@@ -23,7 +23,9 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('users', UserController::class);
+    Route::apiResource('users', UserController::class)->except([
+        'store'
+    ]);
     Route::get('/user', [AuthController::class, 'getUser']);
     Route::get('/post/all', [PostController::class, 'allData']);
     Route::post('/post/store', [PostController::class, 'store']);

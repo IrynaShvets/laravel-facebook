@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Notifications\WelcomeEmailNotification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -40,7 +41,6 @@ class AuthController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                
             ]);
            
             if ($request->hasFile('image')) {
@@ -53,7 +53,8 @@ class AuthController extends Controller
                 $user->save();
                 // Storage::disk('s3')->put($path, file_get_contents($image));
             }
-     
+            $user->notify(new WelcomeEmailNotification());
+            $user->save();
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([

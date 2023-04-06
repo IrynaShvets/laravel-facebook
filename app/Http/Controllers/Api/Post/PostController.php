@@ -43,7 +43,7 @@ class PostController extends Controller
         $validator = Validator::make($request->all(), [
           'title' => 'required|min:5|max:255|string',
           'description' => 'required|min:5|max:100|string',
-          'user_id' => 'required|integer|exists:users,id',
+          // 'user_id' => 'required|integer|exists:users,id',
           'body' => 'required|min:5|string',
           'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
       ]);
@@ -54,15 +54,17 @@ class PostController extends Controller
       //         'error' => $errors
       //     ], 400);
       // }
-      
+       $user = Auth::user();
+
       if ($validator->passes()) {
           $post = Post::create([
               'title' => $request->title,
               'description' => $request->description,
               'body' => $request->body,
               'image' => $request->image,
-              'user_id' => $request->user()->id,
+              'user_id' => $user->id,
           ]);
+
          
           if ($request->hasFile('image')) {
               $destination_path = 'images';

@@ -45,4 +45,13 @@ Route::get('get/file', function () {
     return Storage::download('/storage/app');
 });
 
+Route::get('send/email', function(){
+  
+	$send_mail = 'irinashwets@ukr.net';
+  
+    dispatch(new App\Jobs\SendEmailQueueJob($send_mail));
+  
+    dd('send mail successfully !!');
+});
+
 Auth::routes();

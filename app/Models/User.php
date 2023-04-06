@@ -61,4 +61,11 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    // Mutator for Image column
+    
+    public function setImageAttribute($value)
+    {
+        $this->attributes['image'] = 'http://localhost/storage/' . $value;
+    }
+
 }
