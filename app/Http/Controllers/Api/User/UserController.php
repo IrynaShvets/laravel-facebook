@@ -19,11 +19,12 @@ class UserController extends Controller
     }
     
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource. пермішенси
      */
     public function index()
     {
-        $users =  $this->userRepository->index();
+        $this->authorize('viewAny', User::class);
+        $users =  $this->userRepository->list();
         return UserResource::collection($users);
     }
 
@@ -32,10 +33,11 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        $user = $this->userRepository->show($id);
+        $this->authorize('view', User::class);
+        $user = $this->userRepository->get($id);
         return new UserResource($user);
     }
-
+    
     /**
      * Update the specified resource in storage.
      */

@@ -3,6 +3,8 @@
 namespace App\Observers;
 
 use App\Models\User;
+use App\Notifications\WelcomeEmailNotification;
+use Illuminate\Support\Facades\Auth;
 
 class UserObserver
 {
@@ -11,9 +13,10 @@ class UserObserver
      */
     public function created(User $user): void
     {
-        //
+        $user->notify(new WelcomeEmailNotification());
     }
 
+    
     /**
      * Handle the User "updated" event.
      */

@@ -8,21 +8,25 @@ use App\Repositories\Interfaces\UserRepositoryInterface;
 class UserRepository implements UserRepositoryInterface
 {
 
-    public function index()
+    public function list()
     {
         $page = $data['page'] ?? 1;
         $perPage = $data['per_page'] ?? 10;
         return User::latest()->orderBy('created_at','DESC')->paginate($perPage, ['*'], 'page', $page);
     }
 
-    public function show($id)
+    public function get($id)
     {
         return User::find($id);
     }
 
+    public function register($data)
+    {
+        return User::create($data);
+    }
+
     public function update($data, $id)
     {
-        
         $user = User::where('id', $id)->first();
         $user->name = $data['name'];
         $user->email = $data['email'];

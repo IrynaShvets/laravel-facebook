@@ -50,13 +50,13 @@ class PostController extends Controller
         $post->body = $request->input('body');
         $post->user_id = $request->input('user_id');
         
-        if ($request->hasFile('image')) {
-            $destination_path = 'images';
-            $image = $request->file('image');
-            $image_name = date('d-m-Y')."_".$image->getClientOriginalName();           
-            $path = $request->file('image')->storeAs($destination_path , $image_name, 'public');
-            $post->image = $path;
-        }
+        // if ($request->hasFile('image')) {
+        //     $destination_path = 'images';
+        //     $image = $request->file('image');
+        //     $image_name = date('d-m-Y')."_".$image->getClientOriginalName();           
+        //     $path = $request->file('image')->storeAs($destination_path , $image_name, 'public');
+        //     $post->image = $path;
+        // }
         
         $post->save();
         return redirect()->route('posts.index')->with('success', 'The post has been added.');
@@ -98,15 +98,16 @@ class PostController extends Controller
         $post->description = $request->input('description');
         $post->body = $request->input('body');
         $post->user_id = $request->input('user_id');
+        // $post->image = $request->input('image');
         
-        if ($request->hasFile('image')) {
-            $destination_path = 'images';
-            $image = $request->file('image');
-            $image_name = time()."_".$image->getClientOriginalName();           
-            $path = $request->file('image')->storeAs($destination_path , $image_name, 'public');
-            $post->image = $path;
+        // if ($request->hasFile('image')) {
+        //     $destination_path = 'images';
+        //     $image = $request->file('image');
+        //     $image_name = time()."_".$image->getClientOriginalName();           
+        //     $path = $request->file('image')->storeAs($destination_path , $image_name, 'public');
+        //     $post->image = $path;
             
-        }
+        // }
 
         $post->save();
         return redirect()->route('posts.index')->with('success', 'The post has been added.');

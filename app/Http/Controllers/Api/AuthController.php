@@ -7,62 +7,48 @@ use App\Http\Requests\User\LoginRequest;
 use App\Http\Requests\User\RegisterRequest;
 use App\Http\Requests\User\StoreRequest;
 use App\Http\Resources\UserResource;
+use App\Jobs\SendEmailQueueJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Notifications\RegisteredUserNotification;
 use App\Notifications\WelcomeEmailNotification;
+use App\Repositories\Interfaces\UserRepositoryInterface;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    private $repository;
+
+    public function __construct(UserRepositoryInterface $repository)
+    {
+        $this->repository = $repository;
+    }
+    
     public function register(RegisterRequest $request)
     {
-        // $validator = Validator::make($request->all());
-
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-        ]);
-        
-        // if ($validator->fails()) {
-        //     $errors = $validator->errors();
-        //     return response()->json([
-        //         'error' => $errors
-        //     ], 400);
-        // }
-        
-        if ($validator->passes()) {
-            $user = User::create([
+        $validated = $request->validated();
+        $validated = $request->safe();
+       
+        if ($validated) {
+            $user = $this->repository->register([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-            ]);
-           
-            if ($request->hasFile('image')) {
-                $destination_path = 'images';
-                $image = $request->file('image');
-                $image_name = date('d-m-Y')."_".$image->getClientOriginalName();           
-                $path = $request->file('image')->storeAs($destination_path , $image_name, 'public');
-                $user->image = $path;
-
-                $user->save();
-                // Storage::disk('s3')->put($path, file_get_contents($image));
-            }
-            $user->notify(new WelcomeEmailNotification());
-            $user->save();
-            $token = $user->createToken('auth_token')->plainTextToken;
-
-            return response()->json([
-                'user' => $user,
-                'access_token' => $token,
-                'token_type' => 'Bearer',
+                'image' => $request->image,
             ]);
         }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'user' => new UserResource($user),
+            'access_token' => $token,
+        ]);
     }
 
     public function login(LoginRequest $request)
@@ -78,10 +64,16 @@ class AuthController extends Controller
         Auth::login($user);
         
         $token = $user->createToken('auth_token')->plainTextToken;
+        
+        $is_user = User::where('role_id', 1)->get();
+        
+        Notification::send($is_user, new RegisteredUserNotification($user));
+
+        SendEmailQueueJob::dispatch($user);
+                    
         return response()->json([
-            'user' => $user,
+            'user' => new UserResource($user),
             'access_token' => $token,
-            'token_type' => 'Bearer',
         ]);
 
     }

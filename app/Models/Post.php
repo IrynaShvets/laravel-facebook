@@ -25,15 +25,31 @@ class Post extends Model
 
     protected $guarded = false;
 
+    // public function boot() 
+    // {
+        
+    // }
+
     protected function serializeDate(DateTimeInterface $dates)
     {
         return $dates->format('Y-m-d');
     }
 
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, "user_id");
+    }
+
+    public function setImageAttribute($value)
+    {
+        $this->attributes['image'] = 'images/' . date('d-m-Y')."_".$value->getClientOriginalName();
+    }
+
+    public function getImageUrlAttribute ($value) {
+        if ($value) {
+            return Storage::url($value);
+        }
+        return null;
     }
 
 }

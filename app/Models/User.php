@@ -56,6 +56,11 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
+    public function friends(): HasMany
+    {
+        return $this->hasMany(User::class);
+    }
+
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
@@ -63,9 +68,21 @@ class User extends Authenticatable
 
     // Mutator for Image column
     
+    // public function setImageAttribute($value)
+    // {
+    //     $this->attributes['image'] = 'http://localhost/storage/' . $value;
+    // }
+
     public function setImageAttribute($value)
     {
-        $this->attributes['image'] = 'http://localhost/storage/' . $value;
+        $this->attributes['image'] = 'images/' . date('d-m-Y')."_".$value->getClientOriginalName();
     }
 
+
+    public function getImageUrlAttribute ($value) {
+        if ($value) {
+            return Storage::url($value);
+        }
+        return null;
+    }
 }
