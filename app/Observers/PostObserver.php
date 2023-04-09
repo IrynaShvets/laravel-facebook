@@ -21,7 +21,14 @@ class PostObserver
      */
     public function created(Post $post): void
     {
-        // $post->notify(new WelcomeEmailNotification());
+        //
+    }
+
+    public function updating(Post $post): void
+    {
+        if(Auth::check()) {
+            $post->user_id = Auth::user()->id;
+        }
     }
 
     /**

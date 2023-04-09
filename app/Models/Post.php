@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class Post extends Model
@@ -25,11 +26,6 @@ class Post extends Model
 
     protected $guarded = false;
 
-    // public function boot() 
-    // {
-        
-    // }
-
     protected function serializeDate(DateTimeInterface $dates)
     {
         return $dates->format('Y-m-d');
@@ -42,10 +38,16 @@ class Post extends Model
 
     public function setImageAttribute($value)
     {
-        $this->attributes['image'] = 'images/' . date('d-m-Y')."_".$value->getClientOriginalName();
+        if ($value instanceof UploadedFile) {
+            $filename = date('d-m-Y') . '_' . $value->getClientOriginalName();
+            Storage::put("posts/{$filename}", file_get_contents($value));
+            $this->attributes['image'] = "posts/{$filename}";
+        } else {
+            $this->attributes['image'] = $value;
+        }
     }
 
-    public function getImageUrlAttribute ($value) {
+    public function getImageAttribute ($value) {
         if ($value) {
             return Storage::url($value);
         }

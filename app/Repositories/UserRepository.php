@@ -25,9 +25,9 @@ class UserRepository implements UserRepositoryInterface
         return User::create($data);
     }
 
-    public function update($data, $id)
+    public function update($user, $data)
     {
-        $user = User::where('id', $id)->first();
+        $user = User::where('user', $user)->first();
         $user->name = $data['name'];
         $user->email = $data['email'];
         $user->password = $data['password'];
@@ -35,9 +35,9 @@ class UserRepository implements UserRepositoryInterface
         $user->save();
     }
 
-    public function destroy($id)
+    public function destroy($user)
     {
-        $user = User::find($id);
+        $user = User::find($user);
         $user->delete();
     }
 }

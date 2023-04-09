@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Filters\PostFilters;
 use App\Models\Post;
 use App\Models\User;
 use App\Repositories\Interfaces\PostRepositoryInterface;
@@ -11,7 +12,7 @@ class PostRepository implements PostRepositoryInterface
 
     public function list()
     {
-        return Post::all()->orderBy('created_at','DESC');
+        return Post::all();
     }
 
     public function create($data)
@@ -21,12 +22,12 @@ class PostRepository implements PostRepositoryInterface
 
     public function get($id)
     {
-        return User::find($id);
+        return Post::find($id);
     }
 
-    public function update($data, $id)
+    public function update($post, $data)
     {
-        $post = Post::where('id', $id)->first();
+        $post = Post::where('post', $post)->first();
         $post->title = $data['title'];
         $post->description = $data['description'];
         $post->body = $data['body'];
@@ -34,9 +35,14 @@ class PostRepository implements PostRepositoryInterface
         $post->save();
     }
 
-    public function destroy($id)
+    public function destroy($post)
     {
-        $user = User::find($id);
-        $user->delete();
+        $post = Post::find($post);
+        $post->delete();
+    }
+
+    public function getFiltered(PostFilters $filters)
+    {
+        return Post::filter($filters)->get();
     }
 }

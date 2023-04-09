@@ -3,56 +3,86 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\RegisterRequest;
 use App\Http\Requests\User\UpdateMyselfRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
-use Illuminate\Http\Request;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    private $userRepository;
+    /**
+    * @var repository
+    */
+    private $repository;
 
-    public function __construct(UserRepositoryInterface $userRepository)
+    /**
+    * UserController constructor.
+    *
+    * @param repository $repository
+    */
+    public function __construct(UserRepositoryInterface $repository)
     {
-        $this->userRepository = $userRepository;
+        $this->repository = $repository;
     }
     
     /**
-     * Display a listing of the resource. пермішенси
+     * Display a listing of the resource.
+     *
+     * @return AnonymousResourceCollection
+     * @throws AuthorizationException
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         $this->authorize('viewAny', User::class);
-        $users =  $this->userRepository->list();
+        $users =  $this->repository->list();
         return UserResource::collection($users);
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    * Display the specified resource.
+    *
+    * @param User $user
+    * @return UserResource
+    * @throws AuthorizationException
+    */
+    public function show(string $id): UserResource
     {
         $this->authorize('view', User::class);
-        $user = $this->userRepository->get($id);
+        $user = $this->repository->get($id);
         return new UserResource($user);
     }
     
     /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateMyselfRequest $request, string $id)
+  * Update the specified resource in storage.
+  *
+  * @param UpdateMyselfRequest $request
+  * @param User $user
+  * @return UserResource
+  * @throws AuthorizationException
+  */
+    public function update(UpdateMyselfRequest $request, User $user):UserResource
     {
-        $user = $this->userRepository->update($request->all(), $id);
-        return new UserResource($user);
+        $this->authorize('update', $user);
+        $updated = $this->repository->update($user, $request->validated());
+        return new UserResource($updated);
     }
 
     /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+   * Remove the specified resource from storage.
+   *
+   * @param User $user
+   * @return Response
+   * @throws AuthorizationException
+   */
+    public function destroy(User $user): Response
     {
-        $this->userRepository->destroy($id);
-        return response()->json(null, 204);
+        $this->authorize('delete', $user);
+        $this->repository->destroy($user);
+        return response()->noContent();
     }
 }

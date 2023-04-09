@@ -6,67 +6,96 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Post\StoreApiRequest;
 use App\Http\Requests\Post\StoreRequest;
 use App\Http\Resources\Post\PostResource;
-use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Repositories\Interfaces\PostRepositoryInterface;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Response;
 
 class PostController extends Controller
 {
+  /**
+  * @var repository
+  */
   private $repository;
 
+  /**
+  * UserController constructor.
+  *
+  * @param repository $repository
+  */
   public function __construct(PostRepositoryInterface $repository)
   {
     $this->repository = $repository;
   }
 
-  public function allData(Request $request)
+  /**
+   * Display a listing of the resource.
+   *
+   * @return AnonymousResourceCollection
+   * @throws AuthorizationException
+   */
+  public function allData(): AnonymousResourceCollection
   {
-    $this->authorize('viewAny', User::class);
+    $this->authorize('viewAny', Post::class);
     $posts = $this->repository->list();
     return PostResource::collection($posts);
   }
 
-  public function store(StoreApiRequest $request)
+  /**
+  * Store a newly created resource in storage.
+  *
+  * @param StoreApiRequest $request
+  * @return PostResource
+  * @throws AuthorizationException
+  */
+  public function store(StoreApiRequest $request): PostResource
   {
     $this->authorize('create', Post::class);
-    $validated = $request->validated();
-    $validated = $request->safe();
-    if ($validated) {
-      $post = $this->repository->create([
-        'title' => $request->title,
-        'description' => $request->description,
-        'body' => $request->body,
-        'image' => $request->image,
-      ]);
-    }
-    return response()->json([
-      'post' => new PostResource($post),
-    ]);
+    $post = $this->repository->create($request->validated());
+    return new PostResource($post);
   }
 
-  public function show(Post $post)
+  /**
+  * Display the specified resource.
+  *
+  * @param Post $post
+  * @return PostResource
+  * @throws AuthorizationException
+  */
+  public function show(string $id): PostResource
   {
     $this->authorize('view', Post::class);
+    $post = $this->repository->get($id);
     return new PostResource($post);
   }
 
-  public function update(StoreRequest $request, Post $post)
+  /**
+  * Update the specified resource in storage.
+  *
+  * @param StoreApiRequest $request
+  * @param Post $post
+  * @return PostResource
+  * @throws AuthorizationException
+  */
+  public function update(StoreApiRequest $request, Post $post):PostResource
   {
-    $this->authorize('update', Post::class);
-    if ($request->user()->id !== $post->user_id) {
-      return response()->json(['error' => 'You can only update your own posts.'], 403);
-    }
-    $post->update($request->only(['title', 'description', 'body']));
-    return new PostResource($post);
+    $this->authorize('update', $post);
+    $updated = $this->repository->update($post, $request->validated());
+    return new PostResource($updated);
   }
 
-  public function destroy(Post $post)
+   /**
+   * Remove the specified resource from storage.
+   *
+   * @param Post $post
+   * @return Response
+   * @throws AuthorizationException
+   */
+  public function destroy(Post $post): Response
   {
-    $this->authorize('delete', Post::class);
-    $post->delete();
-    return response()->json(null, 204);
+    $this->authorize('delete', $post);
+    $this->repository->destroy($post);
+    return response()->noContent();
   }
 }

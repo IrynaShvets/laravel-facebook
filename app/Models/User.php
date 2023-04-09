@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -11,6 +13,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
@@ -66,23 +69,22 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    // Mutator for Image column
-    
-    // public function setImageAttribute($value)
-    // {
-    //     $this->attributes['image'] = 'http://localhost/storage/' . $value;
-    // }
-
     public function setImageAttribute($value)
     {
-        $this->attributes['image'] = 'images/' . date('d-m-Y')."_".$value->getClientOriginalName();
+        if ($value instanceof UploadedFile) {
+            $filename = date('d-m-Y') . '_' . $value->getClientOriginalName();
+            Storage::put("users/{$filename}", file_get_contents($value));
+            $this->attributes['image'] = "users/{$filename}";
+        } else {
+            $this->attributes['image'] = $value;
+        }
     }
 
-
-    public function getImageUrlAttribute ($value) {
+    public function getImageAttribute($value) {
         if ($value) {
             return Storage::url($value);
         }
         return null;
     }
+   
 }

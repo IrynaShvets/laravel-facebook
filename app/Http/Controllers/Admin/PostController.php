@@ -44,19 +44,10 @@ class PostController extends Controller
         $this->authorize('create', Post::class);
 
         $post = new Post;
-        
         $post->title = $request->input('title');
         $post->description = $request->input('description');
         $post->body = $request->input('body');
         $post->user_id = $request->input('user_id');
-        
-        // if ($request->hasFile('image')) {
-        //     $destination_path = 'images';
-        //     $image = $request->file('image');
-        //     $image_name = date('d-m-Y')."_".$image->getClientOriginalName();           
-        //     $path = $request->file('image')->storeAs($destination_path , $image_name, 'public');
-        //     $post->image = $path;
-        // }
         
         $post->save();
         return redirect()->route('posts.index')->with('success', 'The post has been added.');
@@ -68,7 +59,6 @@ class PostController extends Controller
     public function show(string $id)
     {
         $this->authorize('view', Post::class);
-
         $post = Post::find($id);
         return view('posts.show', ['post' => $post]);
     }
@@ -98,16 +88,6 @@ class PostController extends Controller
         $post->description = $request->input('description');
         $post->body = $request->input('body');
         $post->user_id = $request->input('user_id');
-        // $post->image = $request->input('image');
-        
-        // if ($request->hasFile('image')) {
-        //     $destination_path = 'images';
-        //     $image = $request->file('image');
-        //     $image_name = time()."_".$image->getClientOriginalName();           
-        //     $path = $request->file('image')->storeAs($destination_path , $image_name, 'public');
-        //     $post->image = $path;
-            
-        // }
 
         $post->save();
         return redirect()->route('posts.index')->with('success', 'The post has been added.');

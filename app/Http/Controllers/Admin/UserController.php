@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\User\StoreRequest;
-use Illuminate\Http\Request;
 use \App\Models\User;
 use App\Models\Role;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UpdateRequest;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -42,28 +41,16 @@ class UserController extends Controller
     public function store(StoreRequest $request): RedirectResponse
     {
         $this->authorize('create', User::class);
-        Auth::user()->name;
+    
         $user = new User;
-        
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->password = Hash::make($request->input('password'));
         $user->role_id = $request->input('role_id');
-
-        if ($request->hasFile('image')) {
-            $destination_path = 'images';
-            $image = $request->file('image');
-            $image_name = date('d-m-Y')."_".$image->getClientOriginalName();           
-            $path = $request->file('image')->storeAs($destination_path , $image_name, 'public');
-            $user->image = $path;
-            $user->save();
-            // $data['image'] = $path;
-        }
         
         $user->save();
-
-    return redirect()->route('users.index')->with('success', 'The post has been added.');
-}
+        return redirect()->route('users.index')->with('success', 'The post has been added.');
+    }
 
     /**
      * Display the specified resource.
@@ -94,7 +81,7 @@ class UserController extends Controller
         $this->authorize('update', User::class);
 
         $user = User::query()->findOrFail($id);
-        $user->update($request->only('role_id'));
+        $user->update($request->only('role_id', 'image'));
         return redirect()->route('users.index')->with('Success');
     }
 
@@ -105,7 +92,8 @@ class UserController extends Controller
     {
         $this->authorize('delete', User::class);
         
-        User::find($id)->delete();
+        $user = User::find($id)->delete();
+        Storage::delete($user->image);
         return redirect()->route('users.index')->with('success', '204');
     }
 }

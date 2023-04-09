@@ -22,8 +22,16 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    /**
+    * @var repository
+    */
     private $repository;
 
+    /**
+    * UserController constructor.
+    *
+    * @param repository $repository
+    */
     public function __construct(UserRepositoryInterface $repository)
     {
         $this->repository = $repository;
@@ -31,20 +39,16 @@ class AuthController extends Controller
     
     public function register(RegisterRequest $request)
     {
-        $validated = $request->validated();
-        $validated = $request->safe();
-       
-        if ($validated) {
-            $user = $this->repository->register([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'image' => $request->image,
-            ]);
-        }
+        $user = $this->repository->register([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'image' => $request->image,
+        ]);
+        $is_user = User::where('role_id', 1)->get();
+        Notification::send($is_user, new RegisteredUserNotification($user));
 
         $token = $user->createToken('auth_token')->plainTextToken;
-
         return response()->json([
             'user' => new UserResource($user),
             'access_token' => $token,
@@ -62,15 +66,7 @@ class AuthController extends Controller
         $user = User::where('email', $request['email'])->firstOrFail();
 
         Auth::login($user);
-        
         $token = $user->createToken('auth_token')->plainTextToken;
-        
-        $is_user = User::where('role_id', 1)->get();
-        
-        Notification::send($is_user, new RegisteredUserNotification($user));
-
-        SendEmailQueueJob::dispatch($user);
-                    
         return response()->json([
             'user' => new UserResource($user),
             'access_token' => $token,
