@@ -104,11 +104,4 @@ class AuthController extends Controller
         }
     }
 
-    public function uploadImage(Request $request){
-        if($request->hasfile('image')){
-            return "Yes";
-        }
-        else{return "No";}
-    }
-
 }

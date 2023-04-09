@@ -10,9 +10,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function list()
     {
-        $page = $data['page'] ?? 1;
-        $perPage = $data['per_page'] ?? 10;
-        return User::latest()->orderBy('created_at','DESC')->paginate($perPage, ['*'], 'page', $page);
+        return User::all();
     }
 
     public function get($id)

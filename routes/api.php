@@ -1,5 +1,6 @@
 <?php
 
+use App\Filters\PostFilters;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Post\PostController;
 use App\Http\Controllers\Api\User\UserController;
@@ -32,8 +33,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/post/{post}/show', [PostController::class, 'show']);
     Route::patch('/post/{id}/update', [PostController::class, 'update']);
     Route::delete('/post/{id}/delete', [PostController::class, 'delete']);
-    Route::get('get/file', function () {
-        return Storage::download('/storage/app');
-    });
-    Route::post('avatar/file', [AuthController::class, 'uploadImage']);
+
+    Route::get('/posts/filter', [PostFilters::class, 'title']);
 });
