@@ -2,11 +2,10 @@
 
 use App\Filters\PostFilters;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ChatController;
 use App\Http\Controllers\Api\Post\PostController;
 use App\Http\Controllers\Api\User\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,4 +34,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/post/{id}/delete', [PostController::class, 'delete']);
 
     Route::get('/posts/filter', [PostFilters::class, 'title']);
+
+    Route::get('/chat', [ChatController::class, 'index']);
+    Route::get('/chat/messages', [ChatController::class, 'messages']);
+    Route::get('/chat/send', [ChatController::class, 'send']);
 });

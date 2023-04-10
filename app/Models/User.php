@@ -69,6 +69,11 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    public function messages(): HasMany
+    {
+        return $this->hasMany(Message::class);
+    }
+
     public function setImageAttribute($value)
     {
         if ($value instanceof UploadedFile) {
