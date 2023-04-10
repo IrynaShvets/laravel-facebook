@@ -34,22 +34,13 @@ class PostController extends Controller
 
   /**
    * Display a listing of the resource.
-   *
-   * @return AnonymousResourceCollection
-   * @throws AuthorizationException
+   * @param FilterRequest $request
+   * @return PostResource
+   * 
    */
-  public function allData(FilterRequest $request): AnonymousResourceCollection
+  public function list(FilterRequest $request): AnonymousResourceCollection
   {
-    // $this->authorize('viewAny', Post::class);
-    // $filter = app()->make(PostFilters::class);
-    // $posts = $this->repository->list($filter);
-    $data = $request->validated();
-    $page = $data['page'] ?? 1;
-    $perPage = $data['per_page'] ?? 10;
-
-    $filter = app()->make(PostFilter::class, ['queryParams' => array_filter($data)]);
-    $posts = Post::filter($filter)->paginate($perPage, ['*'], 'page', $page);
-
+    $posts = $this->repository->list($request->validated());
     return PostResource::collection($posts);
   }
 

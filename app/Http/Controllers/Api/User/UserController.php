@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\FilterRequest;
 use App\Http\Requests\User\RegisterRequest;
 use App\Http\Requests\User\UpdateMyselfRequest;
 use App\Http\Resources\UserResource;
@@ -36,10 +37,9 @@ class UserController extends Controller
      * @return AnonymousResourceCollection
      * @throws AuthorizationException
      */
-    public function index(): AnonymousResourceCollection
+    public function index(FilterRequest $request): AnonymousResourceCollection
     {
-        $this->authorize('viewAny', User::class);
-        $users =  $this->repository->list();
+        $users = $this->repository->list($request->validated());
         return UserResource::collection($users);
     }
 

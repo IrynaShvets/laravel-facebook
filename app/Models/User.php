@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Models\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -18,7 +16,7 @@ use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Filterable;
 
     /**
      * The attributes that are mass assignable.
@@ -59,9 +57,9 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
-    public function friends(): HasMany
+    public function friends(): belongsToMany
     {
-        return $this->hasMany(User::class);
+        return $this->belongsToMany(User::class, 'friends' , 'user_id', 'friend_id');
     }
 
     public function role(): BelongsTo

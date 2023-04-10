@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Filters\PostFilters;
+use App\Http\Filters\PostFilter;
 use App\Models\Post;
 use App\Models\User;
 use App\Repositories\Interfaces\PostRepositoryInterface;
@@ -10,9 +10,13 @@ use App\Repositories\Interfaces\PostRepositoryInterface;
 class PostRepository implements PostRepositoryInterface
 {
 
-    public function list(PostFilters $filters)
+    public function list($data) 
     {
-        return Post::filters($filters)->get();
+        $page = $data['page'] ?? 1;
+        $perPage = $data['per_page'] ?? 10;
+        $filters = app()->make(PostFilter::class, ['queryParams' => array_filter($data)]);
+        
+        return Post::filter($filters)->paginate($perPage, ['*'], 'page', $page);
     }
 
     public function create($data)
@@ -40,9 +44,4 @@ class PostRepository implements PostRepositoryInterface
         $post = Post::find($post);
         $post->delete();
     }
-
-    // public function getFiltered(PostFilters $filters)
-    // {
-    //     return Post::filter($filters)->get();
-    // }
 }

@@ -2,15 +2,20 @@
 
 namespace App\Repositories;
 
+use App\Http\Filters\UserFilter;
 use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 
 class UserRepository implements UserRepositoryInterface
 {
 
-    public function list()
+    public function list($data)
     {
-        return User::all();
+        $page = $data['page'] ?? 1;
+        $perPage = $data['per_page'] ?? 10;
+        $filters = app()->make(UserFilter::class, ['queryParams' => array_filter($data)]);
+        
+        return User::filter($filters)->paginate($perPage, ['*'], 'page', $page);
     }
 
     public function get($id)

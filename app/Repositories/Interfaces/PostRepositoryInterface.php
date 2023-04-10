@@ -1,14 +1,14 @@
 <?php
 namespace App\Repositories\Interfaces;
 
-use App\Filters\PostFilters;
+use App\Http\Filters\PostFilter;
 
 Interface PostRepositoryInterface{
     
-    public function list(PostFilters $filters);
+    public function list(PostFilter $filters);
     public function create($data);
     public function get($id);
     public function update($post, $data); 
     public function destroy($post);
-    // public function getFiltered(PostFilters $filters);
+    
 }

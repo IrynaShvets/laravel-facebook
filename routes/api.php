@@ -1,6 +1,5 @@
 <?php
 
-use App\Filters\PostFilters;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ChatController;
 use App\Http\Controllers\Api\Post\PostController;
@@ -27,7 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
         'store'
     ]);
     Route::get('/user', [AuthController::class, 'getUser']);
-    Route::get('/post/all', [PostController::class, 'allData']);
+    Route::get('/post/all', [PostController::class, 'list']);
     Route::post('/post/store', [PostController::class, 'store']);
     Route::get('/post/{post}/show', [PostController::class, 'show']);
     Route::patch('/post/{id}/update', [PostController::class, 'update']);

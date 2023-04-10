@@ -2,10 +2,8 @@
 
 namespace App\Models;
 
-use App\Filters\QueryFilter;
 use App\Models\Traits\Filterable;
 use \DateTimeInterface;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -38,11 +36,6 @@ class Post extends Model
     {
         return $this->belongsTo(User::class, "user_id");
     }
-
-    // public function scopeFilter(Builder $builder, QueryFilter $filters)
-    // {
-    //     return $filters->apply($builder);
-    // }
 
     public function setImageAttribute($value)
     {
