@@ -23,7 +23,8 @@ class FilterRequest extends FormRequest
     {
         return [
             'title' => 'string',
-            'name' => 'string',
+            'page' => '',
+            'per_page' => '',
         ];
     }
 }

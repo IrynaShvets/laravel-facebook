@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Api\Post;
 
+
 use App\Http\Controllers\Controller;
+use App\Http\Filters\PostFilter;
+use App\Http\Requests\Post\FilterRequest;
 use App\Http\Requests\Post\StoreApiRequest;
 use App\Http\Requests\Post\StoreRequest;
 use App\Http\Resources\Post\PostResource;
@@ -15,15 +18,15 @@ use Illuminate\Http\Response;
 class PostController extends Controller
 {
   /**
-  * @var repository
-  */
+   * @var repository
+   */
   private $repository;
 
   /**
-  * UserController constructor.
-  *
-  * @param repository $repository
-  */
+   * UserController constructor.
+   *
+   * @param repository $repository
+   */
   public function __construct(PostRepositoryInterface $repository)
   {
     $this->repository = $repository;
@@ -35,20 +38,28 @@ class PostController extends Controller
    * @return AnonymousResourceCollection
    * @throws AuthorizationException
    */
-  public function allData(): AnonymousResourceCollection
+  public function allData(FilterRequest $request): AnonymousResourceCollection
   {
-    $this->authorize('viewAny', Post::class);
-    $posts = $this->repository->list();
+    // $this->authorize('viewAny', Post::class);
+    // $filter = app()->make(PostFilters::class);
+    // $posts = $this->repository->list($filter);
+    $data = $request->validated();
+    $page = $data['page'] ?? 1;
+    $perPage = $data['per_page'] ?? 10;
+
+    $filter = app()->make(PostFilter::class, ['queryParams' => array_filter($data)]);
+    $posts = Post::filter($filter)->paginate($perPage, ['*'], 'page', $page);
+
     return PostResource::collection($posts);
   }
 
   /**
-  * Store a newly created resource in storage.
-  *
-  * @param StoreApiRequest $request
-  * @return PostResource
-  * @throws AuthorizationException
-  */
+   * Store a newly created resource in storage.
+   *
+   * @param StoreApiRequest $request
+   * @return PostResource
+   * @throws AuthorizationException
+   */
   public function store(StoreApiRequest $request): PostResource
   {
     $this->authorize('create', Post::class);
@@ -57,12 +68,12 @@ class PostController extends Controller
   }
 
   /**
-  * Display the specified resource.
-  *
-  * @param Post $post
-  * @return PostResource
-  * @throws AuthorizationException
-  */
+   * Display the specified resource.
+   *
+   * @param Post $post
+   * @return PostResource
+   * @throws AuthorizationException
+   */
   public function show(string $id): PostResource
   {
     $this->authorize('view', Post::class);
@@ -71,21 +82,21 @@ class PostController extends Controller
   }
 
   /**
-  * Update the specified resource in storage.
-  *
-  * @param StoreApiRequest $request
-  * @param Post $post
-  * @return PostResource
-  * @throws AuthorizationException
-  */
-  public function update(StoreApiRequest $request, Post $post):PostResource
+   * Update the specified resource in storage.
+   *
+   * @param StoreApiRequest $request
+   * @param Post $post
+   * @return PostResource
+   * @throws AuthorizationException
+   */
+  public function update(StoreApiRequest $request, Post $post): PostResource
   {
     $this->authorize('update', $post);
     $updated = $this->repository->update($post, $request->validated());
     return new PostResource($updated);
   }
 
-   /**
+  /**
    * Remove the specified resource from storage.
    *
    * @param Post $post

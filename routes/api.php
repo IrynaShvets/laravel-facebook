@@ -33,8 +33,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/post/{id}/update', [PostController::class, 'update']);
     Route::delete('/post/{id}/delete', [PostController::class, 'delete']);
 
-    Route::get('/posts/filter', [PostFilters::class, 'title']);
-
     Route::get('/chat', [ChatController::class, 'index']);
     Route::get('/chat/messages', [ChatController::class, 'messages']);
     Route::get('/chat/send', [ChatController::class, 'send']);

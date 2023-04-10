@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Filters\QueryFilter;
+use App\Models\Traits\Filterable;
 use \DateTimeInterface;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,6 +17,7 @@ class Post extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use Filterable;
 
     protected $fillable = [
         'user_id',
@@ -36,6 +39,11 @@ class Post extends Model
         return $this->belongsTo(User::class, "user_id");
     }
 
+    // public function scopeFilter(Builder $builder, QueryFilter $filters)
+    // {
+    //     return $filters->apply($builder);
+    // }
+
     public function setImageAttribute($value)
     {
         if ($value instanceof UploadedFile) {
@@ -53,5 +61,4 @@ class Post extends Model
         }
         return null;
     }
-
 }

@@ -10,9 +10,9 @@ use App\Repositories\Interfaces\PostRepositoryInterface;
 class PostRepository implements PostRepositoryInterface
 {
 
-    public function list()
+    public function list(PostFilters $filters)
     {
-        return Post::all();
+        return Post::filters($filters)->get();
     }
 
     public function create($data)
@@ -41,8 +41,8 @@ class PostRepository implements PostRepositoryInterface
         $post->delete();
     }
 
-    public function getFiltered(PostFilters $filters)
-    {
-        return Post::filter($filters)->get();
-    }
+    // public function getFiltered(PostFilters $filters)
+    // {
+    //     return Post::filter($filters)->get();
+    // }
 }
