@@ -57,11 +57,11 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
-    public function friends(): belongsToMany
+    public function friends(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'friends' , 'user_id', 'friend_id');
+        return $this->belongsToMany(User::class, 'friends' ,'friend_id', 'user_id');
     }
-
+ 
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
