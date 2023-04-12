@@ -25,6 +25,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('users', UserController::class)->except([
         'store'
     ]);
+
+    Route::post('/friend/{id}', [UserController::class, 'addFriend']);
+    Route::delete('/friend/{id}', [UserController::class, 'removeFriend']);
+
     Route::get('/user', [AuthController::class, 'getUser']);
     Route::get('/post/all', [PostController::class, 'list']);
     Route::post('/post/store', [PostController::class, 'store']);

@@ -46,8 +46,7 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             'image' => $request->image,
         ]);
-//  dd($user);
-        
+
         $is_user = User::where('role_id', 1)->get();
         Notification::send($is_user, new RegisteredUserNotification($user));
 

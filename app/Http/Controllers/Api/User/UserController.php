@@ -85,4 +85,16 @@ class UserController extends Controller
         $this->repository->destroy($user);
         return response()->noContent();
     }
+
+    public function addFriend($id)
+    {
+        $friends = $this->repository->addFriend($id);
+        return UserResource::collection($friends);
+    }
+
+    public function removeFriend($id)
+    {
+        $friends = $this->repository->removeFriend($id);
+        return UserResource::collection($friends);
+    }
 }

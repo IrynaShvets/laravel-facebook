@@ -20,8 +20,19 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'image' => $this->image,
+            // 'friends' => $this->whenPivotLoaded('friends', function () {
+            //     return $this->pivot->friends;
+            // }),
             'created_at' => $this->created_at->format('d.m.Y'),
             'updated_at' => $this->updated_at->format('d.m.Y'),
+            'friends' => $this->friends->map(function ($friend) {
+                    return [
+                        'id' => $friend->id,
+                        'name' => $friend->name,
+                        'email' => $friend->email,
+                        'image' => $this->image,
+                    ];
+            })
         ];
     }
 }

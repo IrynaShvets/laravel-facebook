@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Http\Filters\UserFilter;
 use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
+use Illuminate\Support\Facades\Auth;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -42,5 +43,27 @@ class UserRepository implements UserRepositoryInterface
     {
         $user = User::find($user);
         $user->delete();
+    }
+
+    public function addFriend($id)
+    {
+        if (Auth::check()) {
+            $user = User::find(Auth::user()->id);
+            $user->friends()->syncWithoutDetaching($id);
+
+            return $user->friends;
+        }
+      
+
+    }
+    
+    public function removeFriend($id)
+    {
+        if (Auth::check()) {
+            $user = User::find(Auth::user()->id);
+            $user->friends()->detach($id);
+
+            return $user->friends;
+        }
     }
 }
