@@ -1,6 +1,7 @@
 <?php
 
 use App\Broadcasting\ChatChannel;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Broadcast;
 
 /*
@@ -13,9 +14,14 @@ use Illuminate\Support\Facades\Broadcast;
 | used to check if an authenticated user can listen to the channel.
 |
 */
+// Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
+//     return (int) $user->id === (int) $id;
+// });
 
 Broadcast::channel('chat', function ($user, $id) {
-    return true;
+    // return true;
+//    return Auth()->user->id;
+return (int) Auth()->user->id === (int) $id;
 });
 
 // Broadcast::channel('chat', ChatChannel::class);
