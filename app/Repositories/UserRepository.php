@@ -53,8 +53,6 @@ class UserRepository implements UserRepositoryInterface
 
             return $user->friends;
         }
-      
-
     }
     
     public function removeFriend($id)

@@ -59,7 +59,8 @@ class UserController extends Controller
     {
         $this->authorize('view', User::class);
         $user = User::find($id);
-        return view('users.show', ['user' => $user]);
+        $friends = $user->friends;
+        return view('users.show', compact('user', 'friends'));
     }
 
     /**
@@ -93,7 +94,7 @@ class UserController extends Controller
         $this->authorize('delete', User::class);
         
         $user = User::find($id)->delete();
-        Storage::delete($user->image);
+        // Storage::delete($user->image);
         return redirect()->route('users.index')->with('success', '204');
     }
 }

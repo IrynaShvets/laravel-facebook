@@ -15,10 +15,13 @@ return new class extends Migration
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignIdFor(User::class)
-                ->constrained()
-                ->cascadeOnUpdate()
+            $table->foreignId('sender_id')->nullable()->constrained('users')->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->index('sender_id', 'sender_idx');
+
+            $table->foreignId('receiver_id')->nullable()->constrained('users')->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->index('receiver_id', 'receiver_idx');
 
             $table->text('message');
             $table->timestamps();

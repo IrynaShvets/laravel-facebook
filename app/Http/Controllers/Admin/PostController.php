@@ -69,7 +69,6 @@ class PostController extends Controller
     public function edit(string $id)
     {
         $this->authorize('update', Post::class);
-
         $users = User::all();
         $post = Post::find($id);
         return view('posts.edit', ['post' => $post, 'users' => $users, ]);
@@ -81,15 +80,8 @@ class PostController extends Controller
     public function update(StoreRequest $request, string $id)
     {
         $this->authorize('update', Post::class);
-        
-        $post = Post::find($id);
-
-        $post->title = $request->input('title');
-        $post->description = $request->input('description');
-        $post->body = $request->input('body');
-        $post->user_id = $request->input('user_id');
-
-        $post->save();
+        $post = Post::query()->findOrFail($id);
+        $post->update($request->only('title', 'description', 'body', 'image'));
         return redirect()->route('posts.index')->with('success', 'The post has been added.');
     }
 

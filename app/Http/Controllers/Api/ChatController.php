@@ -5,52 +5,40 @@ namespace App\Http\Controllers\Api;
 use App\Events\MessageSent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Message\MessageRequest;
-use App\Http\Resources\UserResource;
-use App\Models\Message;
+use App\Http\Resources\Chat\ChatResource;
+use App\Repositories\Interfaces\ChatRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
-    public function index()
-    {
-        // auth()->check();
+  /**
+   * @var repository
+  */
+  private $repository;
 
-        // return view('chat');
+  /**
+   * UserController constructor.
+   *
+   * @param repository $repository
+   */
+  public function __construct(ChatRepositoryInterface $repository)
+  {
+    $this->repository = $repository;
+  }
+    
+  public function index($user_id)
+  {
+    $messages = $this->repository->list($user_id);
+    return ChatResource::collection($messages);
+  }
 
-        if (Auth::check()) {
-            return new UserResource(Auth::user());
-        } else {
-            return response()->json(['error' => 'Unauthenticated.'], 404);
-        }
-    }
-
-    public function messages()
-    {
-        $messages = Message::query()
-            ->with('user')
-            ->get();
-
-        return response()->json([
-            'messages' => $messages,
-        ]);
-        // return Message::query()
-        //     ->with('user')
-        //     ->get();
-    }
-
-    public function send(MessageRequest $request)
-    {
-        $message = $request->user()
-            ->messages()
-            ->create($request->validated());
-
-        broadcast(new MessageSent($request->user(), $message));
-
-        return response()->json([
-            'message' => $message,
-        ]);
-        // return $message;
-    }
+  public function send(MessageRequest $request)
+  {
+    $message = $this->repository->send($request->validated());
+    //репозиторій виклик, який повертає модельь повідомлення те що отримала броткащу
+    broadcast(new MessageSent($request->user(), $message));
+    // повертаю ресурс  через new
+    return new ChatResource($message);
+  }
 }
-// створення ресурсів, тут зупинилася
