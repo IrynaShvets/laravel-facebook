@@ -14,7 +14,7 @@ class ChatRepository implements ChatRepositoryInterface
             $query->where('sender_id', '=', Auth::user()->id);
             $query->where('receiver_id', '=', $user_id);
         })->orWhere(function($query) use($user_id)  {
-            $query->where('receiver_id', '=', Auth()->user->id);
+            $query->where('receiver_id', '=', Auth::user()->id);
             $query->where('sender_id', '=', $user_id);
         })->orderBy('created_at', 'ASC')->get();
     }

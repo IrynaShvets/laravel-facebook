@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ChatController;
+use App\Http\Controllers\Api\Common\CommonController;
 use App\Http\Controllers\Api\Post\PostController;
 use App\Http\Controllers\Api\User\UserController;
+use App\Http\Controllers\PDFController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,4 +41,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/chat/{user_id}', [ChatController::class, 'index']);
     // Route::get('/chat/messages', [ChatController::class, 'messages']);
     Route::post('/chat/send', [ChatController::class, 'send']);
+
+    // Route::get('/community', [CommunityController::class, 'list']);
+    // Route::post('/community', [CommunityController::class, 'create']);
+
+    Route::get('/common', [CommonController::class, 'list']);
+    Route::post('/common', [CommonController::class, 'create']);
+
+    Route::get('generate/pdf', [PDFController::class, 'generatePDF']);
 });

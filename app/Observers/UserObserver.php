@@ -22,7 +22,7 @@ class UserObserver
      */
     public function updated(User $user): void
     {
-        $user->notify(new WelcomeEmailNotification());
+        // $user->notify(new WelcomeEmailNotification());
     }
 
     /**
@@ -30,7 +30,7 @@ class UserObserver
      */
     public function deleted(User $user): void
     {
-        $user->notify(new WelcomeEmailNotification());
+        // $user->notify(new WelcomeEmailNotification());
     }
 
     /**

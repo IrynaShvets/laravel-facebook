@@ -7,7 +7,9 @@ use App\Models\User;
 use App\Observers\PostObserver;
 use App\Observers\UserObserver;
 use App\Repositories\ChatRepository;
+use App\Repositories\CommonRepository;
 use App\Repositories\Interfaces\ChatRepositoryInterface;
+use App\Repositories\Interfaces\CommonRepositoryInterface;
 use App\Repositories\Interfaces\PostRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\PostRepository;
@@ -25,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(PostRepositoryInterface::class, PostRepository::class);
         $this->app->bind(ChatRepositoryInterface::class, ChatRepository::class);
+        $this->app->bind(CommonRepositoryInterface::class, CommonRepository::class);
     }
 
     /**

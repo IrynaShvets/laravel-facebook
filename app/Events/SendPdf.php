@@ -2,8 +2,6 @@
 
 namespace App\Events;
 
-use App\Models\Message;
-use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -13,24 +11,23 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MessageSent implements ShouldBroadcastNow
+class SendPdf implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $message;
-    public $sender;
-    public $receiver_id;
-    public $created_at;
-
+    public $user_id;
+    public $pdf;
     /**
      * Create a new event instance.
      */
-    public function __construct(Message $message)
-    {   
-        $this->receiver_id = $message->receiver_id;
-        $this->message = $message->message;
-        $this->sender = $message->sender->name;
-        $this->created_at = $message->created_at->format('d.m.Y');
+    public function __construct($pdf, $user_id)
+    {
+        \Log::info('user ID '.$user_id);
+        $this->user_id = $user_id;
+        $this->pdf = $pdf;
+        \Log::info('helo pdf'. $pdf);
+        \Log::info($user_id);
+        
     }
 
     /**
@@ -38,14 +35,17 @@ class MessageSent implements ShouldBroadcastNow
      *
      * @return array<int, \Illuminate\Broadcasting\Channel>
      */
-    public function broadcastOn()
+    public function broadcastOn(): array
     {
-        return new Channel('chat.'.$this->receiver_id);
+       
+        return [
+            new Channel('pdf.' .$this->user_id),
+
+        ];
     }
 
-    public function broadcastAs(): string
+    public function broadcastAs()
     {
-        return 'new-message';
+        return 'send-pdf';
     }
-
 }

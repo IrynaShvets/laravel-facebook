@@ -18,10 +18,13 @@ use Illuminate\Support\Facades\Broadcast;
 //     return (int) $user->id === (int) $id;
 // });
 
-Broadcast::channel('chat', function ($user, $id) {
-    // return true;
-//    return Auth()->user->id;
-return (int) Auth()->user->id === (int) $id;
+Broadcast::channel('chat.{id}', function ($user, $id) {
+    return (int) Auth()->user->id === (int) $id;
+});
+
+Broadcast::channel('pdf.{id}', function ($user, $id) {
+    return true;
+    return (int) Auth()->user->id === (int) $id;
 });
 
 // Broadcast::channel('chat', ChatChannel::class);

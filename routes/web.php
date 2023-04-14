@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\PostController;
 use \App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\PDFController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -53,5 +55,8 @@ Route::get('send/email', function(){
   
     dd('send mail successfully !!');
 });
+
+Route::get("mypdf", [Controller::class, "mypdf"])->name("mypdf");
+// Route::get('generate-pdf', [PDFController::class, 'generatePDF']);
 
 Auth::routes();

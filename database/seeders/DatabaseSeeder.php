@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         // $this->call([
-        //     UserSeeder::class,
+        //    CommonSeeder::class,
         // ]);
         // \App\Models\User::factory(10)->create();
 
