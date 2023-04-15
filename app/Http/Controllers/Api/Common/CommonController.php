@@ -37,4 +37,17 @@ class CommonController extends Controller
     $common = $this->repository->create($request->validated());
     return new CommonResource($common);
   }
+
+  public function show(string $id)
+    {
+        $this->authorize('view', User::class);
+        $common = $this->repository->get($id);
+        return new CommonResource($common);
+    }
+
+  public function addMyself($id)
+  {
+    $users = $this->repository->addMyself($id);
+    return CommonResource::collection($users);
+  }
 }

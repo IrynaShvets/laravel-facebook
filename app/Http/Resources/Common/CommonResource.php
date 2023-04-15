@@ -17,6 +17,15 @@ class CommonResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
+
+            'users' => $this->users->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'image' => $user->image,
+                ];
+        })
         ];
     }
 }

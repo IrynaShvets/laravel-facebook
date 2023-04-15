@@ -46,7 +46,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // Route::post('/community', [CommunityController::class, 'create']);
 
     Route::get('/common', [CommonController::class, 'list']);
+    Route::get('/common/{common}/show', [CommonController::class, 'show']);
     Route::post('/common', [CommonController::class, 'create']);
+    Route::post('/common/{id}', [CommonController::class, 'addMyself']);
 
     Route::get('generate/pdf', [PDFController::class, 'generatePDF']);
 });
