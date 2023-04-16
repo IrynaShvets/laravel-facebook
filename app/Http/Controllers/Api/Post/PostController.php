@@ -94,10 +94,10 @@ class PostController extends Controller
    * @return Response
    * @throws AuthorizationException
    */
-  public function destroy(Post $post): Response
+  public function delete(string $id): Response
   {
-    $this->authorize('delete', $post);
-    $this->repository->destroy($post);
+    $this->authorize('delete', Post::class);
+    $this->repository->destroy($id);
     return response()->noContent();
   }
 }

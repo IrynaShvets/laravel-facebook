@@ -3,8 +3,8 @@
 namespace App\Observers;
 
 use App\Models\Post;
-use App\Notifications\WelcomeEmailNotification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PostObserver
 {
@@ -15,14 +15,6 @@ class PostObserver
             $post->user_id = Auth::user()->id;
         }
     }
-    
-    /**
-     * Handle the Post "created" event.
-     */
-    public function created(Post $post): void
-    {
-        //
-    }
 
     public function updating(Post $post): void
     {
@@ -31,35 +23,8 @@ class PostObserver
         }
     }
 
-    /**
-     * Handle the Post "updated" event.
-     */
-    public function updated(Post $post): void
+    public function deleting(Post $post): void
     {
-        //
-    }
-
-    /**
-     * Handle the Post "deleted" event.
-     */
-    public function deleted(Post $post): void
-    {
-        //
-    }
-
-    /**
-     * Handle the Post "restored" event.
-     */
-    public function restored(Post $post): void
-    {
-        //
-    }
-
-    /**
-     * Handle the Post "force deleted" event.
-     */
-    public function forceDeleted(Post $post): void
-    {
-        //
+        // Storage::delete('posts/' . $post->image);
     }
 }

@@ -24,6 +24,7 @@
         @enderror
         
         <div class="form-group">
+            
             <label for="image">Image</label>
             <input type="file" name="image" 
             placeholder="Edit a image" 

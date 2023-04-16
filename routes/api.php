@@ -25,7 +25,7 @@ Route::post('/logout', [AuthController::class, 'logout']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('users', UserController::class)->except([
-        'store'
+        'store', 'destroy'
     ]);
 
     Route::post('/friend/{id}', [UserController::class, 'addFriend']);
@@ -39,11 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/post/{id}/delete', [PostController::class, 'delete']);
 
     Route::get('/chat/{user_id}', [ChatController::class, 'index']);
-    // Route::get('/chat/messages', [ChatController::class, 'messages']);
     Route::post('/chat/send', [ChatController::class, 'send']);
-
-    // Route::get('/community', [CommunityController::class, 'list']);
-    // Route::post('/community', [CommunityController::class, 'create']);
 
     Route::get('/common', [CommonController::class, 'list']);
     Route::get('/common/{common}/show', [CommonController::class, 'show']);

@@ -6,6 +6,7 @@ use App\Http\Filters\PostFilter;
 use App\Models\Post;
 use App\Models\User;
 use App\Repositories\Interfaces\PostRepositoryInterface;
+use Illuminate\Support\Facades\Auth;
 
 class PostRepository implements PostRepositoryInterface
 {
@@ -39,9 +40,9 @@ class PostRepository implements PostRepositoryInterface
         $post->save();
     }
 
-    public function destroy($post)
+    public function destroy($id)
     {
-        $post = Post::find($post);
+        $post = Post::find($id);
         $post->delete();
     }
 }

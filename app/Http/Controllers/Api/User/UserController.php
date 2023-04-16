@@ -72,20 +72,6 @@ class UserController extends Controller
         return new UserResource($updated);
     }
 
-    /**
-   * Remove the specified resource from storage.
-   *
-   * @param User $user
-   * @return Response
-   * @throws AuthorizationException
-   */
-    public function destroy(User $user): Response
-    {
-        $this->authorize('delete', $user);
-        $this->repository->destroy($user);
-        return response()->noContent();
-    }
-
     public function addFriend($id)
     {
         $friends = $this->repository->addFriend($id);

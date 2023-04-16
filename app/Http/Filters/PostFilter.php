@@ -22,4 +22,9 @@ class PostFilter extends AbstractFilter
         $builder->where('title', 'like', "%{$value}%");
     }
 
+    public function sorter(Builder $builder, $value)
+    {
+        $builder->orderBy('created_at', $value);
+    }
+    
 }

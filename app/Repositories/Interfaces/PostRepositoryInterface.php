@@ -9,5 +9,5 @@ Interface PostRepositoryInterface{
     public function create($data);
     public function get($id);
     public function update($post, $data); 
-    public function destroy($post);
+    public function destroy($id);
 }

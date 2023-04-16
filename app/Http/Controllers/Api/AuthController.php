@@ -68,7 +68,13 @@ class AuthController extends Controller
         $user = User::where('email', $request['email'])->firstOrFail();
 
         Auth::login($user);
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $userAgent = $request->header('User-Agent');
+        $user->tokens()
+            ->where('name', $userAgent)
+            ->delete();
+
+        $token = $user->createToken($userAgent)->plainTextToken;
+        
         return response()->json([
             'user' => new UserResource($user),
             'access_token' => $token,
@@ -89,7 +95,7 @@ class AuthController extends Controller
         if (!$user) {
             return response()->json(['message' => 'Logged out']);
         }
-        $request->user()->token()->revoke();
+        
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

@@ -25,6 +25,6 @@ class PDFController extends Controller
         // $   Storage::put("posts/{$filename}", file_get_contents($value));
          
      
-        return response("Success", 200);
+        return response("Success", 200)->header('Content-Type', 'application/pdf');
     }
 }

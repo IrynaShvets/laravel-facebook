@@ -53,16 +53,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // protected static function boot()
-    // {
-    //     parent::boot();
-    //     static::creating(function ($message) {
-    //         if(Auth::check()) {
-    //             $message->user_id = Auth::user()->id;
-    //         }
-    //     });
-    // }
-
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class);
@@ -82,16 +72,6 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Common::class);
     }
-
-    // public function communities(): BelongsToMany
-    // {
-    //     return $this->belongsToMany(User::class, 'communities' , 'user_id', 'id');
-    // }
-
-    // public function communities(): HasMany
-    // {
-    //     return $this->hasMany(Community::class);
-    // }
 
     public function messages(): HasMany
     {

@@ -39,12 +39,6 @@ class UserRepository implements UserRepositoryInterface
         $user->save();
     }
 
-    public function destroy($user)
-    {
-        $user = User::find($user);
-        $user->delete();
-    }
-
     public function addFriend($id)
     {
         if (Auth::check()) {
