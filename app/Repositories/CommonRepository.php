@@ -35,5 +35,18 @@ class CommonRepository implements CommonRepositoryInterface
             return $user->commons;
         }
     }
+
+    public function destroy($id)
+    {
+        // $common = Common::find($id);
+        // $common->delete();
+
+        if (Auth::check()) {
+            $user = User::find(Auth::user()->id);
+            $user->commons()->detach($id);
+
+            return $user->commons;
+        }
+    }
     
 }

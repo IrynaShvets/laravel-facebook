@@ -22,7 +22,7 @@ class CommonRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|min:5|max:255|string',
+            'title' => 'required|min:2|max:255|string',
             
         ];
     }

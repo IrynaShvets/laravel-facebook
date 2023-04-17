@@ -9,4 +9,5 @@ Interface CommonRepositoryInterface {
     public function create($data);
     public function get($id);
     public function addMyself($id);
+    public function destroy($id);
 }

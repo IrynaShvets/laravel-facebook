@@ -50,4 +50,10 @@ class CommonController extends Controller
     $users = $this->repository->addMyself($id);
     return CommonResource::collection($users);
   }
+
+  public function delete(string $id)
+  {
+    $commons = $this->repository->destroy($id);
+    return CommonResource::collection($commons);
+  }
 }

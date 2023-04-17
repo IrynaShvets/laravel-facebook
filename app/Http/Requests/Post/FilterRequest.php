@@ -22,7 +22,7 @@ class FilterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'sorter' => '',
+            'sorter' => 'nullable',
             'title' => 'nullable|string',
             'page' => '',
             'per_page' => '',

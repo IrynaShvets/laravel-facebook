@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('users', UserController::class)->except([
         'store', 'destroy'
     ]);
+    
 
     Route::post('/friend/{id}', [UserController::class, 'addFriend']);
     Route::delete('/friend/{id}', [UserController::class, 'removeFriend']);
@@ -35,7 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/post/all', [PostController::class, 'list']);
     Route::post('/post/store', [PostController::class, 'store']);
     Route::get('/post/{post}/show', [PostController::class, 'show']);
-    Route::patch('/post/{id}/update', [PostController::class, 'update']);
+    Route::post('/post/{id}/update', [PostController::class, 'update']);
     Route::delete('/post/{id}/delete', [PostController::class, 'delete']);
 
     Route::get('/chat/{user_id}', [ChatController::class, 'index']);
@@ -45,6 +46,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/common/{common}/show', [CommonController::class, 'show']);
     Route::post('/common', [CommonController::class, 'create']);
     Route::post('/common/{id}', [CommonController::class, 'addMyself']);
+    Route::delete('/common/{id}/delete', [CommonController::class, 'delete']);
 
     Route::get('generate/pdf', [PDFController::class, 'generatePDF']);
 });

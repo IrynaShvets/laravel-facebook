@@ -2,10 +2,11 @@
 
 namespace App\Policies;
 
+use App\Models\Common;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class UserPolicy
+class CommonPolicy
 {
     use HandlesAuthorization;
 
@@ -14,7 +15,7 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->role->permissions->contains('name', 'user.access');
+        return $user->role->permissions->contains('name', 'common.access');
     }
 
     /**
@@ -22,7 +23,7 @@ class UserPolicy
      */
     public function view(User $user): bool
     {
-        return $user->role->permissions->contains('name', 'user.access');
+        return $user->role->permissions->contains('name', 'common.access');
     }
 
     /**
@@ -30,15 +31,15 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role->permissions->contains('name', 'user.create');
+        return $user->role->permissions->contains('name', 'common.create');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user)
+    public function update(User $user): bool
     {
-        return $user->role->permissions->contains('name', 'user.update');
+        return $user->role->permissions->contains('name', 'common.update');
     }
 
     /**
@@ -46,7 +47,6 @@ class UserPolicy
      */
     public function delete(User $user): bool
     {
-        return $user->role->permissions->contains('name', 'user.delete');
+        return $user->role->permissions->contains('name', 'common.delete');
     }
-
 }

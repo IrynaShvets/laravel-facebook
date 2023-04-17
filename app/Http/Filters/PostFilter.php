@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Builder;
 class PostFilter extends AbstractFilter
 {
     public const TITLE = 'title';
+    public const SORTER = 'sorter';
    
 
     protected function getCallbacks(): array
     {
         return [
             self::TITLE => [$this, 'title'],
-           
+            self::SORTER => [$this, 'sorter'],
         ];
     }
 
@@ -24,7 +25,10 @@ class PostFilter extends AbstractFilter
 
     public function sorter(Builder $builder, $value)
     {
-        $builder->orderBy('created_at', $value);
+        // $builder->orderBy('sorter', [$value]);
+        $builder->orderByRaw('created_at', $value);
+        // ->orderByRaw('updated_at - created_at DESC')
+        
     }
     
 }

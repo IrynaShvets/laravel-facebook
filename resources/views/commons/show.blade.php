@@ -2,23 +2,23 @@
 
 @section('content')
     <div class="bg-light p-4 rounded">
-        <h1>{{ ucfirst($role->name) }} Role</h1>
+        <h1>{{ ucfirst($common->title) }} Common</h1>
         <div class="lead">
             
         </div>
         
         <div class="container mt-4">
 
-            <h3>Assigned permissions</h3>
+            <h3>Assigned users</h3>
 
             <table class="table table-striped">
                 <thead>
                     <th scope="col">Name</th>
                 </thead>
 
-                @foreach($rolePermissions as $permission)
+                @foreach($commonUsers as $user)
                     <tr>
-                        <td>{{ $permission->name }}</td>
+                        <td>{{ $user->name }}</td>
                     </tr>
                 @endforeach
             </table>
@@ -26,7 +26,7 @@
 
     </div>
     <div class="mt-4">
-        <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-info">Edit</a>
-        <a href="{{ route('roles.index') }}" class="btn btn-info">Back</a>
+        <a href="{{ route('commons.edit', $common->id) }}" class="btn btn-info">Edit</a>
+        <a href="{{ route('commons.index') }}" class="btn btn-info">Back</a>
     </div>
 @endsection

@@ -77,6 +77,18 @@
                                 </ul>
                             </div>
                         </li>
+
+                        <li class="nav-item">
+                            <div class="dropdown py-sm-2 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
+                                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownCommons" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="d-none d-sm-inline mx-1 text-dark h5">Commons</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownCommons">
+                                    <li><a href="{{ route('commons.index') }}" class="dropdown-item">All commons</a></li>
+                                    <li><a href="{{ route('commons.create') }}" class="dropdown-item">Create common</a></li>
+                                </ul>
+                            </div>
+                        </li>
                     </ul>
                     
                         

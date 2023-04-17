@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PostController;
 use \App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\CommonController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Controller;
@@ -41,6 +42,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('permissions', PermissionController::class)->except([
         'show', 'edit', 'update'
     ]);
+    Route::resource('commons', CommonController::class);
 });
 
 Route::get('get/file', function () {

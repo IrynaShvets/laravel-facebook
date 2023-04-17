@@ -16,16 +16,6 @@ class Common extends Model
 
     protected $guarded = false;
 
-    // protected static function boot()
-    // {
-    //     // parent::boot();
-    //     // static::creating(function ($common) {
-    //     //     if(Auth::check()) {
-    //     //         $common->user_id = Auth::user()->id;
-    //     //     }
-    //     // });
-    // }
-
     public function users()
     {
         return $this->belongsToMany(User::class);

@@ -13,7 +13,10 @@ use App\Models\Post;
 use App\Repositories\Interfaces\PostRepositoryInterface;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class PostController extends Controller
 {
@@ -80,13 +83,22 @@ class PostController extends Controller
    * @return PostResource
    * @throws AuthorizationException
    */
-  public function update(StoreApiRequest $request, Post $post): PostResource
+  public function update(StoreApiRequest $request, Post $post)
   {
     $this->authorize('update', $post);
     $updated = $this->repository->update($post, $request->validated());
     return new PostResource($updated);
+
+    // $post = $request->post();
+    // $validatedData = $request->validated();
+    // $post->update($validatedData);
+    // $post = $post->refresh();
+    // $success['post'] = $post;
+    // $success['success'] = true;
+    // return response()->json($success, 200);
   }
 
+  
   /**
    * Remove the specified resource from storage.
    *
@@ -94,10 +106,10 @@ class PostController extends Controller
    * @return Response
    * @throws AuthorizationException
    */
-  public function delete(string $id): Response
+  public function delete(string $id)
   {
     $this->authorize('delete', Post::class);
     $this->repository->destroy($id);
-    return response()->noContent();
+    return response()->json(['message' => 'Success']);
   }
 }

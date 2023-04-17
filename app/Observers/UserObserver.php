@@ -17,5 +17,7 @@ class UserObserver
     public function deleting(User $user): void
     {
         // Storage::delete('users/' . $user->image);
+        
     }
+
 }

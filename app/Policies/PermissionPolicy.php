@@ -47,20 +47,4 @@ class PermissionPolicy
     {
         return $user->role->permissions->contains('name', 'permission.delete');
     }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Permission $permission): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Permission $permission): bool
-    {
-        //
-    }
 }

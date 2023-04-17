@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\Common;
 use App\Models\Permission;
 use App\Models\Post;
 use App\Models\Role;
 use App\Models\User;
+use App\Policies\CommonPolicy;
 use App\Policies\PermissionPolicy;
 use App\Policies\UserPolicy;
 use App\Policies\PostPolicy;
@@ -25,6 +27,7 @@ class AuthServiceProvider extends ServiceProvider
         Post::class => PostPolicy::class,
         Role::class => RolePolicy::class,
         Permission::class => PermissionPolicy::class,
+        Common::class => CommonPolicy::class,
     ];
 
     /**

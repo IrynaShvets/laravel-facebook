@@ -10,8 +10,11 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -65,12 +68,34 @@ class UserController extends Controller
   * @return UserResource
   * @throws AuthorizationException
   */
-    public function update(UpdateMyselfRequest $request, User $user):UserResource
+    public function update(UpdateMyselfRequest $request, User $user)
     {
         $this->authorize('update', $user);
         $updated = $this->repository->update($user, $request->validated());
         return new UserResource($updated);
+
+        // $user = $request->user();
+        // $validatedData = $request-> validated();
+        // $user->update($validatedData);
+        // $user = $user->refresh();
+        // $success['user'] = $user;
+        // $success['success'] = true;
+        // return response()->json($success, 200);
     }
+
+//     public function update(Request $request)
+//   {
+//     $user = Auth::user();
+
+//     $user->name = $request->input('name');
+//     $user->email = $request->input('email');
+//     $user->password = bcrypt($request->input('password'));
+
+//     $user->save();
+
+//     return response()->json(['success' => true]);
+//   }
+
 
     public function addFriend($id)
     {
@@ -83,4 +108,5 @@ class UserController extends Controller
         $friends = $this->repository->removeFriend($id);
         return UserResource::collection($friends);
     }
+
 }
