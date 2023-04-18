@@ -2,11 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Http\Requests\Common\CommonRequest;
 use App\Models\Common;
 use App\Models\User;
 use App\Repositories\Interfaces\CommonRepositoryInterface;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CommonRepository implements CommonRepositoryInterface
@@ -38,9 +36,7 @@ class CommonRepository implements CommonRepositoryInterface
 
     public function destroy($id)
     {
-        // $common = Common::find($id);
-        // $common->delete();
-
+        
         if (Auth::check()) {
             $user = User::find(Auth::user()->id);
             $user->commons()->detach($id);

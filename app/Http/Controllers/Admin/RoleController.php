@@ -41,7 +41,7 @@ class RoleController extends Controller
         $this->authorize('create', Role::class);
         $data = request()->validate([
             'name' => 'required|unique:roles|max:50',
-            'permissions' => '',
+            'permissions' => 'required|array',
         ]);
         $permissions = $data['permissions'];
         unset($data['permissions']);

@@ -27,11 +27,6 @@ class Post extends Model
 
     protected $guarded = false;
 
-    protected function serializeDate(DateTimeInterface $dates)
-    {
-        return $dates->format('Y-m-d');
-    }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, "user_id");

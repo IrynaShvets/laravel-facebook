@@ -28,7 +28,6 @@ Route::middleware('auth:sanctum')->group(function () {
         'store', 'destroy'
     ]);
     
-
     Route::post('/friend/{id}', [UserController::class, 'addFriend']);
     Route::delete('/friend/{id}', [UserController::class, 'removeFriend']);
 

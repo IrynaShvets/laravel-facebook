@@ -37,8 +37,8 @@ class CommonController extends Controller
     {
         $this->authorize('create', Common::class);
         $data = request()->validate([
-            'title' => 'required|min:2|max:255|string',
-            'users' => '',
+            'title' => 'required|min:2|max:50|string',
+            'users' => 'required|array',
         ]);
         $users = $data['users'];
         unset($data['users']);

@@ -24,11 +24,8 @@ class PostFilter extends AbstractFilter
     }
 
     public function sorter(Builder $builder, $value)
-    {
-        // $builder->orderBy('sorter', [$value]);
-        $builder->orderByRaw('created_at', $value);
-        // ->orderByRaw('updated_at - created_at DESC')
-        
+    {   
+        $builder->orderBy('created_at', $value);
     }
     
 }

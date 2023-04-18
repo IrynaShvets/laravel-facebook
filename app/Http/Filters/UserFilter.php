@@ -12,7 +12,6 @@ class UserFilter extends AbstractFilter
     {
         return [
             self::NAME => [$this, 'name'],
-           
         ];
     }
 

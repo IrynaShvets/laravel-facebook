@@ -15,8 +15,10 @@ class PostRepository implements PostRepositoryInterface
     {
         $page = $data['page'] ?? 1;
         $perPage = $data['per_page'] ?? 10;
+  
         $filters = app()->make(PostFilter::class, ['queryParams' => array_filter($data)]);
-        
+        // $f = Post::filter($filters)->paginate($perPage, ['*'], 'page', $page);
+        // dd($filters);
         return Post::filter($filters)->paginate($perPage, ['*'], 'page', $page);
     }
 

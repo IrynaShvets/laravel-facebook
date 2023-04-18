@@ -20,10 +20,6 @@ class PDFController extends Controller
         $users = User::get();
 
         GenerateUserPdfJob::dispatch($users, Auth::user()->id);
-        // Pdf::loadFile(public_path().'/myfile.html')->save('/path-to/my_stored_file.pdf')
-       // виклик джоби 
-        // $   Storage::put("posts/{$filename}", file_get_contents($value));
-         
      
         return response("Success", 200)->header('Content-Type', 'application/pdf');
     }

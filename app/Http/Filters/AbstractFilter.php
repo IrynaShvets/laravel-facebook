@@ -28,6 +28,8 @@ abstract class AbstractFilter implements FilterInterface
 
         foreach ($this->getCallbacks() as $name => $callback) {
             if (isset($this->queryParams[$name])) {
+                \Log::info($name);
+                \Log::info($this->queryParams);
                 call_user_func($callback, $builder, $this->queryParams[$name]);
             }
         }
