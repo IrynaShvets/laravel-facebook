@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -75,30 +76,6 @@ class PostController extends Controller
     return new PostResource($post);
   }
 
-  /**
-   * Update the specified resource in storage.
-   *
-   * @param StoreApiRequest $request
-   * @param Post $post
-   * @return PostResource
-   * @throws AuthorizationException
-   */
-  public function update(StoreApiRequest $request, Post $post)
-  {
-    $this->authorize('update', $post);
-    $updated = $this->repository->update($post, $request->validated());
-    return new PostResource($updated);
-
-    // $post = $request->post();
-    // $validatedData = $request->validated();
-    // $post->update($validatedData);
-    // $post = $post->refresh();
-    // $success['post'] = $post;
-    // $success['success'] = true;
-    // return response()->json($success, 200);
-  }
-
-  
   /**
    * Remove the specified resource from storage.
    *

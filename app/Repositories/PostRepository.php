@@ -32,16 +32,6 @@ class PostRepository implements PostRepositoryInterface
         return Post::find($id);
     }
 
-    // public function update($post, $data)
-    // {
-    //     $post = Post::where('post', $post)->first();
-    //     $post->title = $data['title'];
-    //     $post->description = $data['description'];
-    //     $post->body = $data['body'];
-    //     $post->image = $data['image'];
-    //     $post->save();
-    // }
-
     public function destroy($id)
     {
         $post = Post::find($id);
