@@ -27,7 +27,6 @@ class CommonController extends Controller
   public function list()
   {
     $common = $this->repository->list();
-// dd(new CommonResource($common));
 
     return CommonResource::collection($common);
   }

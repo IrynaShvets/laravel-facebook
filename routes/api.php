@@ -31,11 +31,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/friend/{id}', [UserController::class, 'addFriend']);
     Route::delete('/friend/{id}', [UserController::class, 'removeFriend']);
 
-    Route::get('/user', [AuthController::class, 'getUser']);
     Route::get('/post/all', [PostController::class, 'list']);
     Route::post('/post/store', [PostController::class, 'store']);
     Route::get('/post/{post}/show', [PostController::class, 'show']);
-    // Route::post('/post/{id}/update', [PostController::class, 'update']);
     Route::delete('/post/{id}/delete', [PostController::class, 'delete']);
 
     Route::get('/chat/{user_id}', [ChatController::class, 'index']);

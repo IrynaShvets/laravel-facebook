@@ -97,7 +97,10 @@ class RoleController extends Controller
     public function destroy(string $id)
     {
         $this->authorize('delete', Role::class);
-        Role::find($id)->delete();
+        $role = Role::find($id);
+
+        $role->permissions()->detach($id);
+    
         return redirect()->route('roles.index')->with('success', '204');
     }
 }

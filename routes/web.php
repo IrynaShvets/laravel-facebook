@@ -59,6 +59,5 @@ Route::get('send/email', function(){
 });
 
 Route::get("mypdf", [Controller::class, "mypdf"])->name("mypdf");
-// Route::get('generate-pdf', [PDFController::class, 'generatePDF']);
 
 Auth::routes();

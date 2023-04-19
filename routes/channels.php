@@ -26,5 +26,3 @@ Broadcast::channel('pdf.{id}', function ($user, $id) {
     return true;
     return (int) Auth()->user->id === (int) $id;
 });
-
-// Broadcast::channel('chat', ChatChannel::class);

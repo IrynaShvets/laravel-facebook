@@ -103,13 +103,13 @@ class AuthController extends Controller
         return response()->json(['message' => 'Logged out']);
     }
 
-    public function getUser()
-    {
-        if (Auth::check()) {
-            return new UserResource(Auth::user());
-        } else {
-            return response()->json(['error' => 'Unauthenticated.'], 404);
-        }
-    }
+    // public function getUser()
+    // {
+    //     if (Auth::check()) {
+    //         return new UserResource(Auth::user());
+    //     } else {
+    //         return response()->json(['error' => 'Unauthenticated.'], 404);
+    //     }
+    // }
 
 }
